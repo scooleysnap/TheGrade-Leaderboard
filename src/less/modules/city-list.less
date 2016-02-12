@@ -1,0 +1,72 @@
+.city-select {
+	background-color: @secondary-grey;
+	font-family: @font-family;
+
+	&-header {
+		font-size: 14px;
+		font-weight: 400;
+		color: @inactive-color;
+		margin: 0;
+		padding: 8px 0 8px 15px;
+	}
+	
+	&-toggle {
+		color: @primary-color;
+		background-color: @secondary-grey;
+		border-bottom: 1px solid @tertiary-grey;
+		line-height: 24px;
+		font-size: 13px;
+		text-align: center;
+		font-weight: 500;
+
+		&:after {
+			font-family: @icon-font-family;
+			content: "\e60a";
+			display: inline-block;
+			font-size: 13px;
+			vertical-align: middle;
+		}
+		
+		.is-down &:after {
+			-ms-transform: rotate(90deg); /* IE 9 */
+			-webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+			transform: rotate(90deg);
+		}
+		
+		.is-up &:after {
+			-ms-transform: rotate(270deg); /* IE 9 */
+			-webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
+			transform: rotate(270deg);
+		}
+	}
+
+	.city-list {
+		width: 100%;
+		padding: 0 0 0 15px;
+		margin: 0;
+		list-style: none;
+		background-color: @secondary-grey;
+		color: #fff;
+		font-size: 16px;
+		box-sizing: border-box;
+
+		&-item {
+			box-sizing: border-box;
+			padding: 12px 15px 12px 0;
+			border-bottom: 1px solid @tertiary-grey;
+
+			&:after {
+				content: "\e60a";
+				font-family: @icon-font-family;
+				display: block;
+				float: right;
+				font-size: 16px;
+				-ms-transform: rotate(180deg); /* IE 9 */
+				-webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+				transform: rotate(180deg);
+			}
+		}
+
+	}
+
+}

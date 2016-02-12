@@ -1,0 +1,84 @@
+/*
+Grade Conversion
+*/
+
+.grade-circle {
+	&[data-grade="A+"]:before{
+		content: "\e619";
+	}
+	&[data-grade="A"]:before{
+		content: "\e61a";
+	}
+	&[data-grade="A-"]:before{
+		content: "\e61b";
+	}
+	&[data-grade="B+"]:before{
+		content: "\e618";
+	}
+	&[data-grade="B"]:before{
+		content: "\e617";
+	}
+	&[data-grade="B-"]:before{
+		content: "\e616";
+	}
+	&[data-grade="C+"]:before{
+		content: "\e615";
+	}
+	&[data-grade="C"]:before{
+		content: "\e614";
+	}
+	&[data-grade="C-"]:before{
+		content: "\e613";
+	}
+	&[data-grade="D+"]:before{
+		content: "\e612";
+	}
+	&[data-grade="D"]:before{
+		content: "\e611";
+	}
+	&[data-grade="D-"]:before{
+		content: "\e610";
+	}
+	&[data-grade="F"]:before{
+		content: "\e60F";
+	}
+}
+
+/*
+Layout/Appearance
+*/
+
+@grade-circle-size: 48px;
+
+.grade-circle{
+	display: block;
+	box-sizing: border-box;
+	width: @grade-circle-size;
+	height: @grade-circle-size;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+	margin: auto;
+
+
+	&:before{
+		font-size: 30px;
+		font-family: @icon-font-family;
+		color: #fff;
+		box-sizing: border-box;
+		line-height: @grade-circle-size;
+	}
+
+	&[data-grade^="A"], &[data-grade^="B"], &[data-grade^="C"] {
+		background-color: @primary-color;
+	}
+
+	&[data-grade^="D"], &[data-grade="F"] {
+		background-color: @warning-color;
+	}
+
+
+}

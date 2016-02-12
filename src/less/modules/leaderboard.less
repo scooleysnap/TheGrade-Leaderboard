@@ -1,0 +1,66 @@
+.leaderboard {
+	font-family: @font-family;
+	display: table;
+	border-spacing: 0 1px;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	counter-reset: rank;
+	color: #fff;
+	background-color: @primary-grey;
+
+	&-row {
+		display: table-row;
+		background-color: lighten(@secondary-grey, 3%);
+	}
+
+	&-item {
+		display: table-cell;
+		vertical-align: middle;
+		padding: 4px 0;
+	}
+
+	&-count {
+		padding: 0 0 0 15px;
+		width: 40px;
+
+		&:before {
+			counter-increment: rank;
+			content: counter(rank) ".";
+		}	
+	}
+
+	&-photo {
+		width: 54px;
+	}
+
+	&-stats {
+		padding: 0 0 0 8px;
+		line-height: 1.3;
+
+		&-name {
+			display: block;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		&-likes {
+			display: block;
+			font-size: 14px;
+			font-weight: 600;
+			color: @inactive-color;
+
+			&:after {
+				content: ' likes';
+				display: inline;
+				font-weight: 400;
+			}
+		}
+	}
+
+	&-grade {
+		padding: 0 15px 0 0;
+	}
+
+	
+}

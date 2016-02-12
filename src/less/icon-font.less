@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'TheGrade';
+    src:    url('../fonts/TheGrade.eot?950pr8');
+    src:    url('../fonts/TheGrade.eot?950pr8#iefix') format('embedded-opentype'),
+        url('../fonts/TheGrade.ttf?950pr8') format('truetype'),
+        url('../fonts/TheGrade.woff?950pr8') format('woff'),
+        url('../fonts/TheGrade.svg?950pr8#TheGrade') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.icon {
+	
+	/* General Setup ===========*/
+
+	font-family: 'TheGrade' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	/* Icon Defs ===========*/
+
+	&-globe:before {
+		content: "\e901";
+	}
+
+	&-female:before{
+		content: "\e903";
+	}
+
+	&-male:before{
+		content: "\e902";
+	}
+
+	&-location:before {
+		content: "\e606";
+	}
+
+	&-settings:before{
+		content: "\e60e";
+	}
+
+	&-friends:before{
+		content: "\e605";
+	}
+	
+	&-x:before {
+		content: "\e60c";
+	}
+
+	&-arrow:before {
+		content: "\e60a";
+	}
+
+}
