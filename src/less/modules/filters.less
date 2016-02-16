@@ -1,8 +1,116 @@
-.filter {
+.filters-view {
 	font-family: @font-family;
 	background-color: @secondary-grey;
 
-	&-item {
-		
+	&-header {
+		font-size: 15px;
+		font-weight: 400;
+		color: #fff;
+		margin: 0;
+		padding: 12px 0 12px 15px
+
 	}
+}
+
+.filter {
+
+	&-label {
+		color: @inactive-color;
+		font-size: 13px;
+		font-weight: 400;
+		padding: 0 15px 8px 15px;
+	}
+
+	&-wrap {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 0 15px;
+		background-color: @primary-grey;
+		border-top: 1px solid @tertiary-grey;
+		border-bottom: 1px solid @tertiary-grey;
+
+
+	}
+
+	
+	&-select {
+		position: relative;
+		height: 44px;
+		line-height: 44px;
+
+		&:after {
+			position: absolute;
+			top: 0;
+			right: 16px;
+			font-family: @icon-font-family;
+			content: "\e60a";
+			font-size: 24px;
+			display: block;
+			z-index: 1;
+			-ms-transform: rotate(270deg); /* IE 9 */
+			-webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
+			transform: rotate(270deg);
+			color: @tertiary-grey;
+		}
+	}
+
+	select {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		display: block;
+		z-index: 2;
+		-webkit-appearance: none;
+		appearance: none;
+		background-color: transparent;
+		border: none;
+		font-size: 17px;
+		color: @tertiary-grey;
+		padding: 0;
+		margin: 0;
+			
+			&:focus {
+				outline: none;
+		 }
+	}
+
+	&-toggle {
+		width: 22px;
+		height: 22px;
+		line-height: 22px;
+		box-sizing: border-box;
+		margin-top: 11px;
+		float: right;
+		clear: none;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		-ms-border-radius: 50%;
+		-o-border-radius: 50%;
+		border-radius: 50%;
+		background-color: @tertiary-grey;
+	}
+
+	&.is-active {
+		select {
+			color: #fff;
+		}
+
+		.filter-toggle {
+			background-color: @primary-color;
+			text-align: center;
+
+			&:before {
+				font-family: @icon-font-family;
+				content: "\e60d";
+				text-align: center;
+				font-size: 12px;
+				color: @primary-grey;
+			}
+		}
+	}
+
+
 }

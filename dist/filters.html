@@ -6,24 +6,28 @@
 	<link rel="stylesheet" href="assets/css/leaderboard.css">
 </head>
 <body>
-	<div class="filter">
+	<div class="filters-view">
 		<header class="title-bar">
 			<h1 class="title-bar-title">Filters</h1>
 		</header>
-		<div class="filter-item filter-item-distance">
-			<label class="filter-item-label" for="distance">Distance</label>
-			<div class="select-wrap">
-				<select name="distance" id="distance">
-					<option value="5">5 Miles</option>
-					<option value="10">10 Miles</option>
-					<option value="15">25 Miles</option>
-					<option value="50">50 Miles</option>
-					<option value="100">100 Miles</option>
-					<option value="200">200 Miles</option>
-				</select>
-				<div class="filter-item-toggle"></div>
+		<h1 class="filters-view-header">Tap a filter to select.</h1>
+		<div class="filter is-active">
+			<div class="filter-label">Distance</div>
+			<div class="filter-wrap">
+				<div class="filter-toggle"></div>
+				<div class="filter-select">
+					<select name="distance" id="distance">
+						<option value="5">5 Miles</option>
+						<option value="10">10 Miles</option>
+						<option value="25">25 Miles</option>
+						<option value="50">50 Miles</option>
+						<option value="100">100 Miles</option>
+						<option value="200">200 Miles</option>
+					</select>
+				</div>
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
