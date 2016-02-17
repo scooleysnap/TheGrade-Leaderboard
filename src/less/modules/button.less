@@ -1,35 +1,67 @@
 .button {
-	background: none;
-	border: none;
-	outline: none;
 	margin: 0;
 	padding: 0;
 	font-family: @font-family;
-	font-size: 15px;
-
-
-	&-filter {
-		color: @primary-color;
-		border: 1px solid @primary-color;
+	text-align: center;
+	font-weight: 400;
+	
+	
+	&-radius {
 		-webkit-border-radius: 3px;
 		-moz-border-radius: 3px;
 		-ms-border-radius: 3px;
 		-o-border-radius: 3px;
 		border-radius: 3px;
+	}
+
+	&-ghost {
+		border: 1px solid @primary-color;
+		background-color: transparent;
+		color: @primary-color;
+
+		&:active {
+			border: 1px solid @primary-color;
+			background-color: @primary-color;
+			color: @primary-grey;
+		}
+
+		&.is-disabled {
+			border: 1px solid @tertiary-grey;
+			color: @tertiary-grey;
+		}
+	}
+
+	&-fill {
+		border: 1px solid @primary-color;
+		background-color: @primary-color;
+		color: @primary-grey;
+
+		&:active {
+			border: 1px solid @primary-color;
+			background-color: transparent;
+			color: @primary-color;
+		}
+
+		&.is-disabled {
+			border: 1px solid @tertiary-grey;
+			background-color: @tertiary-grey;
+			color: @primary-grey;
+		}
+	}
+
+
+
+	&-filter {
+		font-size: 15px;
 		height: 30px;
 		line-height: 30px;
 		padding: 0 8px;
 		position: absolute;
 		top: 7px;
-		right: 8px; 
+		right: 8px;
 
 		& .icon {
 			vertical-align: middle;
-		}
-
-		&:hover{
-			color: #000;
-			background-color: @primary-color;
 		}
 	}
 
@@ -42,6 +74,11 @@
 
 	& .icon {
 		font-size: 20px;
+	}
+
+	&-cancel, &-apply  {
+		width: 100%;
+		line-height: 35px;
 	}
 
 

@@ -1,6 +1,9 @@
+
 .filters-view {
-	font-family: @font-family;
 	background-color: @secondary-grey;
+	font-family: @font-family;
+	height: 100vh;
+	position: relative;
 
 	&-header {
 		font-size: 15px;
@@ -10,35 +13,119 @@
 		padding: 12px 0 12px 15px
 
 	}
+
+	&-buttons {
+		width: 100%;
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 8px 0;
+		box-sizing: border-box;
+		&:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	}
+
+	&-button-wrap {
+		box-sizing: border-box;
+		float: left;
+		width: 50%;
+		padding: 0 8px;
+	}
 }
 
 .filter {
-
+	width: 100%;
+	font-family: @font-family;
+	padding-bottom: 12px;
+	color: @tertiary-grey;
+	
 	&-label {
 		color: @inactive-color;
 		font-size: 13px;
 		font-weight: 400;
-		padding: 0 15px 8px 15px;
+		padding: 8px 0 8px 15px;
+		margin: 0;
 	}
-
+	
 	&-wrap {
 		box-sizing: border-box;
-		width: 100%;
-		padding: 0 15px;
+		height: 44px;
+		line-height: 44px;
+		padding-left: 15px;
 		background-color: @primary-grey;
 		border-top: 1px solid @tertiary-grey;
 		border-bottom: 1px solid @tertiary-grey;
+		//clear context	
+		&:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+	}
 
+	&-control, &-toggle-wrap {
+		float: left;
+		box-sizing: border-box;
+	}
+
+	&-control {
+		width: 83.333%;
+		height: 100%;
+	}
+
+	&-toggle-wrap {
+		width: 16.666%;
+		height: 100%;
+	}
+
+	&-toggle {
+		box-sizing: border-box;
+		width: 22px;
+		height: 22px;
+		line-height: 22px;
+		background-color: @tertiary-grey;
+		margin: 9px auto 0 auto;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		-ms-border-radius: 50%;
+		-o-border-radius: 50%;
+		border-radius: 50%;
 
 	}
 
-	
 	&-select {
 		position: relative;
-		height: 44px;
-		line-height: 44px;
+		height: 100%;
+		
+		select {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+			color: inherit;
+			-webkit-appearance: none;
+			appearance: none;
+			background-color: transparent;
+			border: none;
+			font-size: 17px;
+			font-weight: 400;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+
+			&:focus {
+				outline: none;
+			}
+		}
 
 		&:after {
+			//down arrow
 			position: absolute;
 			top: 0;
 			right: 16px;
@@ -50,67 +137,87 @@
 			-ms-transform: rotate(270deg); /* IE 9 */
 			-webkit-transform: rotate(270deg); /* Chrome, Safari, Opera */
 			transform: rotate(270deg);
-			color: @tertiary-grey;
 		}
 	}
+}
 
-	select {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		width: 100%;
-		display: block;
-		z-index: 2;
-		-webkit-appearance: none;
-		appearance: none;
-		background-color: transparent;
-		border: none;
-		font-size: 17px;
-		color: @tertiary-grey;
-		padding: 0;
-		margin: 0;
-			
+.filter--age {
+	
+	.filter-wrap {
+		padding-left: 0;
+	}
+
+	.filter-input {
+		position: relative;
+		float: left;
+		width: 50%;
+		height: 100%;
+		
+		input {
+			position: absolute;
+			top: 0;
+			color: inherit;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 2;
+			-webkit-appearance: none;
+			appearance: none;
+			background-color: transparent;
+			border: none;
+			font-size: 17px;
+			font-weight: 400;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			text-align: center;
+			border-right: 1px solid @tertiary-grey;
+
 			&:focus {
 				outline: none;
-		 }
-	}
-
-	&-toggle {
-		width: 22px;
-		height: 22px;
-		line-height: 22px;
-		box-sizing: border-box;
-		margin-top: 11px;
-		float: right;
-		clear: none;
-		-webkit-border-radius: 50%;
-		-moz-border-radius: 50%;
-		-ms-border-radius: 50%;
-		-o-border-radius: 50%;
-		border-radius: 50%;
-		background-color: @tertiary-grey;
-	}
-
-	&.is-active {
-		select {
-			color: #fff;
-		}
-
-		.filter-toggle {
-			background-color: @primary-color;
-			text-align: center;
-
-			&:before {
-				font-family: @icon-font-family;
-				content: "\e60d";
-				text-align: center;
-				font-size: 12px;
-				color: @primary-grey;
 			}
 		}
+		
+		// from and to labels
+		&-min:before, &-max:before {
+			font-size: 11px;
+			font-weight: 400;
+			position: absolute;
+			top: 6px;
+			left: 8px;
+			z-index: 1;
+			line-height: 1;
+		}
+
+		&-min:before {
+			content: 'From:';
+		}
+
+		&-max:before {
+			content: 'To:';
+
+		}
 	}
 
+	[class="filter-input"]:last-of-type {
+		border: none;
+	}
+}
 
+
+.filter.is-active {
+	color: #fff;
+
+	.filter-toggle {
+		background-color: @primary-color;
+		text-align: center;
+
+		&:before {
+			font-family: @icon-font-family;
+			content: "\e60d";
+			text-align: center;
+			font-size: 12px;
+			color: @primary-grey;
+		}
+	}
 }
