@@ -2,8 +2,14 @@
 .filters-view {
 	background-color: @secondary-grey;
 	font-family: @font-family;
-	height: 100vh;
-	position: relative;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	//hide by default
+	-webkit-transform: translate3d(0,-100%,0);
+	trasnform: translate3d(0,-100%,0);
 
 	&-header {
 		font-size: 15px;
@@ -34,6 +40,11 @@
 		float: left;
 		width: 50%;
 		padding: 0 8px;
+	}
+
+	&.is-visible {
+		-webkit-transform: translate3d(0,-100%,0);
+		trasnform: translate3d(0,-100%,0);
 	}
 }
 

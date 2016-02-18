@@ -5,8 +5,9 @@
   "main": "n/a",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "browserify src/js/main.js > dist/assets/js/leaderboard.js",
     "build:css": "lessc src/less/main.less dist/assets/css/leaderboard.css",
-    "build": "npm run build:css",
+    "build": "npm run build:css && npm run build:js",
     "build:watch": "watch 'npm run build' ./src -d"
   },
   "repository": {
@@ -20,7 +21,11 @@
   },
   "homepage": "https://github.com/scooleysnap/TheGrade-Leaderboard",
   "devDependencies": {
+    "browserify": "^13.0.0",
     "less": "^2.6.0",
     "watch": "^0.17.1"
+  },
+  "dependencies": {
+    "angular": "^1.5.0"
   }
 }

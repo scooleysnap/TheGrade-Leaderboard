@@ -7,11 +7,11 @@
 	margin: 0;
 	counter-reset: rank;
 	color: #fff;
-	background-color: @primary-grey;
+	background-color: #000;
 
 	&-row {
 		display: table-row;
-		background-color: lighten(@secondary-grey, 3%);
+		background-color: @secondary-grey;
 	}
 
 	&-item {
@@ -32,6 +32,14 @@
 
 	&-photo {
 		width: 54px;
+		
+		img {
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			-ms-border-radius: 3px;
+			-o-border-radius: 3px;
+			border-radius: 3px;
+		}
 	}
 
 	&-stats {

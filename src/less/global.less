@@ -1,4 +1,7 @@
+html, body {height: 100%}
+
 body {
+	background-color: #000;
 	margin: 0;
 	padding: 0;
 	font-size: 16px;
@@ -6,4 +9,18 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	touch-action: manipulation;
+}
+
+.page-wrap {
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.scroll-wrap {
+	height: 100%;
+	padding-top: @title-bar-height;
+	padding-bottom: @tab-bar-height;
+	box-sizing: border-box;
+	overflow-y: scroll;
 }
