@@ -9,19 +9,18 @@ module.exports = function($rootScope){
 	this.activeGender = 'F';
 
 	this.setActiveType = function(type){
-		if(_types.indexOf(type) >= 0) {
+		if(_types.indexOf(type) >= 0 && type != this.activeType) {
 			this.activeType = type;
 			$rootScope.$broadcast('tabService::activeTypeUpdated', type);
 		}
 	}
 
 	this.setActiveGender = function(gender){
-		if(_genders.indexOf(gender) >= 0) {
+		if(_genders.indexOf(gender) >= 0 && gender != this.activeGender) {
 			this.activeGender = gender;
 			$rootScope.$broadcast('tabService::activeGenderUpdated', gender);
+			
 		}
 	}
-
-
 
 };

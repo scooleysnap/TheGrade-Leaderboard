@@ -31456,15 +31456,30 @@ module.exports = angular;
 },{"./angular":3}],5:[function(require,module,exports){
 'use strict';
 
-module.exports = function($scope){
-	
+module.exports = function($scope, $rootScope, requestService){
+
+	$scope.users = [];
+
+	$rootScope.$on('tabService::activeTypeUpdated', function(event, type){
+		console.log('tabService::activeTypeUpdated : ' + type );
+		requestService.buildUrl();
+	});
+
+	$rootScope.$on('tabService::activeGenderUpdated', function(event, gender){
+		console.log('tabService::activeGenderUpdated : ' + gender );
+		requestService.buildUrl();
+	});
+
+	$rootScope.$on('requestService::urlUpdated', function(event, url){
+		console.log('requestService::urlUpdated : ' + url );
+	});
 };
 },{}],6:[function(require,module,exports){
 'use strict';
 
 require('angular');
 
-angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$scope', require('./LeaderboardController')]);
+angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$scope', '$rootScope', 'requestService', require('./LeaderboardController')]);
 
 },{"./LeaderboardController":5,"angular":4}],7:[function(require,module,exports){
 'use strict';
@@ -31538,7 +31553,63 @@ require('./directives');
 require('angular');
 
 angular.module('TheGrade.Leaderboard').service('tabService', ['$rootScope', require('./tab-service')]);
-},{"./tab-service":12,"angular":4}],12:[function(require,module,exports){
+angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'tabService', require('./request-service')]);
+},{"./request-service":12,"./tab-service":13,"angular":4}],12:[function(require,module,exports){
+'use strict';
+
+module.exports = function($rootScope, tabService){
+	var _finalUrl = '',
+	_baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
+	_fbid = '48611106',
+	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
+
+
+
+	var buildParams = function() {
+		var _type = tabService.activeType;
+		var _gender = tabService.activeGender;
+
+		var _params = {};
+
+		if (_type === 'location') {
+			_params.type = _type;
+			_params.city = 'Atlanta';
+			_params.gender = _gender;
+		}
+		else {
+			_params.type = _type;
+			_params.gender = _gender;
+		}
+
+		return _params;
+	};
+	
+
+	var makeUrl = function(params) {
+		var _url = _baseUrl + '?fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
+
+
+		_url += '&type=' + params.type,
+		_url += '&gender=' + params.gender;
+			
+
+		if ('city' in params) {
+			_url += '&city=' + params.city;
+		}
+
+		return _url;
+	};
+
+	this.buildUrl = function() {
+		var params = buildParams();
+		_finalUrl = makeUrl(params);
+		$rootScope.$broadcast('requestService::urlUpdated', _finalUrl);
+	};
+
+	this.requestUrl = _finalUrl;
+
+};
+},{}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = function($rootScope){
@@ -31550,20 +31621,19 @@ module.exports = function($rootScope){
 	this.activeGender = 'F';
 
 	this.setActiveType = function(type){
-		if(_types.indexOf(type) >= 0) {
+		if(_types.indexOf(type) >= 0 && type != this.activeType) {
 			this.activeType = type;
 			$rootScope.$broadcast('tabService::activeTypeUpdated', type);
 		}
 	}
 
 	this.setActiveGender = function(gender){
-		if(_genders.indexOf(gender) >= 0) {
+		if(_genders.indexOf(gender) >= 0 && gender != this.activeGender) {
 			this.activeGender = gender;
 			$rootScope.$broadcast('tabService::activeGenderUpdated', gender);
+			
 		}
 	}
-
-
 
 };
 },{}]},{},[10]);
