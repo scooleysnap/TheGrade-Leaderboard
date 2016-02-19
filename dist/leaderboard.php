@@ -7,7 +7,11 @@
 	<script src="assets/js/leaderboard.js"></script>
 </head>
 <body ontouchstart>
-	<div class="page-wrap" ng-controller="MainController">
+	<ng-view></ng-view>
+</body>
+
+<script type="text/ng-template" id="leaderboard-view">
+	<div class="page-wrap">
 		<title-bar></title-bar>
 		<div class="scroll-wrap">
 			<ul class="leaderboard">
@@ -164,7 +168,7 @@
 			</div>
 		</div>
 	</div>
-</body>
+</script>
 <script type="text/ng-template" id="title-bar">
 	<header class="title-bar title-bar-fixed">
 		<div class="button button-close"><span class="icon icon-x"></span></div>
@@ -174,26 +178,26 @@
 </script>
 <script type="text/ng-template" id="tab-bar">
 	<nav class="tab-bar">
-		<div class="tab-bar-item" ng-click="tabs.setActiveTab('nearby')" ng-class="{'is-active': tabs.isActiveTab('nearby')}">
+		<div class="tab-bar-item" ng-click="selectType('nearby')" ng-class="{'is-active': isActiveType('nearby')}">
 			<span class="icon icon-location"></span>
 			<span class="tab-bar-item-label">Nearby</span>
 		</div>
-		<div class="tab-bar-item" ng-click="tabs.setActiveTab('cities')" ng-class="{'is-active': tabs.isActiveTab('cities')}">
+		<div class="tab-bar-item" ng-click="selectType('location')" ng-class="{'is-active': isActiveType('location')}">
 			<span class="icon icon-globe"></span>
 			<span class="tab-bar-item-label">Cities</span>
 		</div>
-		<div class="tab-bar-item" ng-click="tabs.setActiveTab('friends')" ng-class="{'is-active': tabs.isActiveTab('friends')}">
+		<div class="tab-bar-item" ng-click="selectType('friends')" ng-class="{'is-active': isActiveType('friends')}">
 			<span class="icon icon-friends"></span>
 			<span class="tab-bar-item-label">Friends</span>
 		</div>
 		<div class="tab-bar-item">
 			<span class="tab-bar-divider"></span>
 		</div>
-		<div class="tab-bar-item" ng-click="gender.setActiveGender('f')" ng-class="{'is-active': gender.isActiveGender('f')}">
+		<div class="tab-bar-item" ng-click="selectGender('F')" ng-class="{'is-active': isActiveGender('F')}">
 			<span class="icon icon-female"></span>
 			<span class="tab-bar-item-label">Female</span>
 		</div>
-		<div class="tab-bar-item" ng-click="gender.setActiveGender('m')" ng-class="{'is-active': gender.isActiveGender('m')}">
+		<div class="tab-bar-item" ng-click="selectGender('M')" ng-class="{'is-active': isActiveGender('M')}">
 			<span class="icon icon-male"></span>
 			<span class="tab-bar-item-label">Male</span>
 		</div>

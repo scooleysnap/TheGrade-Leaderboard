@@ -1,30 +1,28 @@
 'use strict';
 
-module.exports = function() {
+module.exports = function(tabService) {
 	return {
-		scope: true,
+		scope: {},
 		templateUrl: 'tab-bar',
-		controller: function($scope) {
-			$scope.tabs = [];
-			$scope.tabs.activeTab = 'nearby';
-
-			$scope.tabs.setActiveTab = function(tab){
-				$scope.tabs.activeTab = tab;
+		link: function (scope, elem, attrs){
+			
+			scope.selectType = function (type){
+				tabService.setActiveType(type);
 			};
 
-			$scope.tabs.isActiveTab = function(tab){
-				return $scope.tabs.activeTab === tab;
+			scope.isActiveType = function (type) {
+				return type === tabService.activeType;
 			};
 
-			$scope.gender = [];
-			$scope.gender.activeGender = 'f';
-			$scope.gender.setActiveGender = function(gender) {
-				$scope.gender.activeGender = gender;
+			scope.selectGender = function (gender){
+				tabService.setActiveGender(gender);
 			};
 
-			$scope.gender.isActiveGender = function(gender) {
-				return $scope.gender.activeGender === gender;
-			}
+			scope.isActiveGender = function (gender) {
+				return gender === tabService.activeGender;
+			};
+
+
 		}
 	};
-}
+};
