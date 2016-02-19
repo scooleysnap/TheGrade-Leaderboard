@@ -31462,16 +31462,14 @@ module.exports = function($scope, $rootScope, requestService){
 
 	$rootScope.$on('tabService::activeTypeUpdated', function(event, type){
 		console.log('tabService::activeTypeUpdated : ' + type );
-		requestService.buildUrl();
+		$scope.requestUrl = requestService.requestUrl();
+		console.log($scope.requestUrl);
 	});
 
 	$rootScope.$on('tabService::activeGenderUpdated', function(event, gender){
 		console.log('tabService::activeGenderUpdated : ' + gender );
-		requestService.buildUrl();
-	});
-
-	$rootScope.$on('requestService::urlUpdated', function(event, url){
-		console.log('requestService::urlUpdated : ' + url );
+		$scope.requestUrl = requestService.requestUrl();
+		console.log($scope.requestUrl);
 	});
 };
 },{}],6:[function(require,module,exports){
@@ -31558,8 +31556,7 @@ angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 
 'use strict';
 
 module.exports = function($rootScope, tabService){
-	var _finalUrl = '',
-	_baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
+	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
 	_fbid = '48611106',
 	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
 
@@ -31600,13 +31597,12 @@ module.exports = function($rootScope, tabService){
 		return _url;
 	};
 
-	this.buildUrl = function() {
+	this.requestUrl = function() {
 		var params = buildParams();
-		_finalUrl = makeUrl(params);
-		$rootScope.$broadcast('requestService::urlUpdated', _finalUrl);
-	};
+		var finalUrl = makeUrl(params);
 
-	this.requestUrl = _finalUrl;
+		return finalUrl;
+	};
 
 };
 },{}],13:[function(require,module,exports){

@@ -1,8 +1,7 @@
 'use strict';
 
 module.exports = function($rootScope, tabService){
-	var _finalUrl = '',
-	_baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
+	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
 	_fbid = '48611106',
 	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
 
@@ -43,12 +42,11 @@ module.exports = function($rootScope, tabService){
 		return _url;
 	};
 
-	this.buildUrl = function() {
+	this.requestUrl = function() {
 		var params = buildParams();
-		_finalUrl = makeUrl(params);
-		$rootScope.$broadcast('requestService::urlUpdated', _finalUrl);
-	};
+		var finalUrl = makeUrl(params);
 
-	this.requestUrl = _finalUrl;
+		return finalUrl;
+	};
 
 };
