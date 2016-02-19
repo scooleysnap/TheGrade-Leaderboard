@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function($rootScope, tabService){
+module.exports = function($rootScope, tabService, filterService){
 	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
 	_fbid = '48611106',
 	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
@@ -28,7 +28,7 @@ module.exports = function($rootScope, tabService){
 	
 
 	var makeUrl = function(params) {
-		var _url = _baseUrl + '?fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
+		var _url = _baseUrl + 'fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
 
 
 		_url += '&type=' + params.type,
@@ -43,10 +43,8 @@ module.exports = function($rootScope, tabService){
 	};
 
 	this.requestUrl = function() {
-		var params = buildParams();
-		var finalUrl = makeUrl(params);
 
-		return finalUrl;
+		return makeUrl(buildParams());
 	};
 
 };

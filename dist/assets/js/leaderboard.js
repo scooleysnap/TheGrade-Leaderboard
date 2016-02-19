@@ -31482,12 +31482,38 @@ angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$sc
 },{"./LeaderboardController":5,"angular":4}],7:[function(require,module,exports){
 'use strict';
 
+module.exports = function(filterService){
+	return {
+		templateUrl: 'filter-view',
+		require: 'ngModel',
+		link: function(scope, elem, attrs) {
+
+			scope.selectFilter = function(filter, value) {
+				filterService.addFilter(filter, value);
+			};
+			scope.deselectFilter = function(filter, value) {
+				filterService.addFilter(filter, value);
+			};
+			scope.updateFilter = function(filter, value){
+				filterservice.activeFilters[filter] = value;
+			}
+			scope.isSelected = function(filter, value){
+				return filter in filterService.activeFilters;
+			};
+
+		}
+	}
+};
+},{}],8:[function(require,module,exports){
+'use strict';
+
 require('angular');
 
 angular.module('TheGrade.Leaderboard').directive('titleBar', require('./title-bar'));
 angular.module('TheGrade.Leaderboard').directive('tabBar', ['tabService', require('./tab-bar')]);
+angular.module('TheGrade.Leaderboard').directive('filterView', ['filterService', require('./filter-view')]);
 
-},{"./tab-bar":8,"./title-bar":9,"angular":4}],8:[function(require,module,exports){
+},{"./filter-view":7,"./tab-bar":9,"./title-bar":10,"angular":4}],9:[function(require,module,exports){
 'use strict';
 
 module.exports = function(tabService) {
@@ -31517,7 +31543,7 @@ module.exports = function(tabService) {
 	};
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -31525,7 +31551,7 @@ module.exports = function() {
 		templateUrl: 'title-bar'
 	}
 }
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 require('angular');
@@ -31545,17 +31571,43 @@ require('./services');
 require('./controllers');
 require('./directives');
 
-},{"./controllers":6,"./directives":7,"./services":11,"angular":4,"angular-route":2}],11:[function(require,module,exports){
+},{"./controllers":6,"./directives":8,"./services":13,"angular":4,"angular-route":2}],12:[function(require,module,exports){
+'use strict';
+
+module.exports = function(){
+	var _activeFilters = {};
+
+	this.addFilter = function(filter, value){
+		if (!(filter in _activeFilters)){
+			_activeFilters[filter] = value;
+		}
+	}
+
+	this.removeFilter = function(filter){
+		if (filter in _activeFilters) {
+			delete _filters[filter];
+		}
+	}
+
+	this.resetFilters = function(){
+		_activeFilters = {};
+	}
+
+	this.activeFilters = _activeFilters;
+};
+},{}],13:[function(require,module,exports){
 'use strict';
 
 require('angular');
 
 angular.module('TheGrade.Leaderboard').service('tabService', ['$rootScope', require('./tab-service')]);
-angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'tabService', require('./request-service')]);
-},{"./request-service":12,"./tab-service":13,"angular":4}],12:[function(require,module,exports){
+angular.module('TheGrade.Leaderboard').service('filterService', ['$rootScope', require('./request-service')]);
+angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'tabService', 'filterService', require('./filter-service')]);
+
+},{"./filter-service":12,"./request-service":14,"./tab-service":15,"angular":4}],14:[function(require,module,exports){
 'use strict';
 
-module.exports = function($rootScope, tabService){
+module.exports = function($rootScope, tabService, filterService){
 	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
 	_fbid = '48611106',
 	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
@@ -31583,7 +31635,7 @@ module.exports = function($rootScope, tabService){
 	
 
 	var makeUrl = function(params) {
-		var _url = _baseUrl + '?fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
+		var _url = _baseUrl + 'fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
 
 
 		_url += '&type=' + params.type,
@@ -31598,14 +31650,12 @@ module.exports = function($rootScope, tabService){
 	};
 
 	this.requestUrl = function() {
-		var params = buildParams();
-		var finalUrl = makeUrl(params);
 
-		return finalUrl;
+		return makeUrl(buildParams());
 	};
 
 };
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = function($rootScope){
@@ -31632,4 +31682,4 @@ module.exports = function($rootScope){
 	}
 
 };
-},{}]},{},[10]);
+},{}]},{},[11]);
