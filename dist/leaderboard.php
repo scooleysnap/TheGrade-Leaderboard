@@ -10,59 +10,14 @@
 	<div class="page-wrap" ng-view></div>
 </body>
 
-<script type="text/ng-template" id="leaderboard-view">
-	
+<script type="text/ng-template" id="leaderboard-view">	
 	<title-bar></title-bar>
 	<div class="scroll-wrap">
 		<ul class="leaderboard">
-			<li class="leaderboard-row">
-				<div class="leaderboard-item leaderboard-count"></div>
-				<div class="leaderboard-item leaderboard-photo"><img src="http://www.fillmurray.com/640/1136" width-"53" height="94" alt=""></div>
-				<div class="leaderboard-item leaderboard-stats">
-					<span class="leaderboard-stats-name">Kayla</span>
-					<span class="leaderboard-stats-likes">178</span>
-				</div>
-				<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="A+"></span></div>
-			</li>
-			<li class="leaderboard-row">
-				<div class="leaderboard-item leaderboard-count"></div>
-				<div class="leaderboard-item leaderboard-photo"><img src="http://www.fillmurray.com/640/1136" width-"53" height="94" alt=""></div>
-				<div class="leaderboard-item leaderboard-stats">
-					<span class="leaderboard-stats-name">Kayla</span>
-					<span class="leaderboard-stats-likes">178</span>
-				</div>
-				<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="A+"></span></div>
-			</li>
-			<li class="leaderboard-row">
-				<div class="leaderboard-item leaderboard-count"></div>
-				<div class="leaderboard-item leaderboard-photo"><img src="http://www.fillmurray.com/640/1136" width-"53" height="94" alt=""></div>
-				<div class="leaderboard-item leaderboard-stats">
-					<span class="leaderboard-stats-name">Kayla</span>
-					<span class="leaderboard-stats-likes">178</span>
-				</div>
-				<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="A+"></span></div>
-			</li>
-			<li class="leaderboard-row">
-				<div class="leaderboard-item leaderboard-count"></div>
-				<div class="leaderboard-item leaderboard-photo"><img src="http://www.fillmurray.com/640/1136" width-"53" height="94" alt=""></div>
-				<div class="leaderboard-item leaderboard-stats">
-					<span class="leaderboard-stats-name">Kayla</span>
-					<span class="leaderboard-stats-likes">178</span>
-				</div>
-				<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="A+"></span></div>
-			</li>
-			<li class="leaderboard-row">
-				<div class="leaderboard-item leaderboard-count"></div>
-				<div class="leaderboard-item leaderboard-photo"><img src="http://www.fillmurray.com/640/1136" width-"53" height="94" alt=""></div>
-				<div class="leaderboard-item leaderboard-stats">
-					<span class="leaderboard-stats-name">Kayla</span>
-					<span class="leaderboard-stats-likes">178</span>
-				</div>
-				<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="A+"></span></div>
-			</li>
+			<leaderboard-item ng-repeat="user in users"></leaderboard-item>
 		</ul>
 	</div>
-	<tab-bar></tab-bar>
+	<tab-bar active-type="activeType" active-gender="activeGender"></tab-bar>
 	<filter-view></filter-view>
 </script>
 <script type="text/ng-template" id="title-bar">
@@ -72,32 +27,37 @@
 		<div class="button button-radius button-ghost button-filter">Filter <span class="icon icon-settings"></span></div>
 	</header>
 </script>
+<script type="text/ng-template" id="leaderboard-item">
+	<li class="leaderboard-row" ng-click="goToProfile()" user="user">
+		<div class="leaderboard-item leaderboard-count"></div>
+		<div class="leaderboard-item leaderboard-photo"><img ng-src="{{user.img}}" width-"53" height="94" alt=""></div>
+		<div class="leaderboard-item leaderboard-stats">
+			<span class="leaderboard-stats-name">{{user.first_name}}</span>
+			<span class="leaderboard-stats-likes">{{user.total_weekly_likes}}</span>
+		</div>
+		<div class="leaderboard-item leaderboard-grade"><span class="grade-circle" data-grade="{{user.grade_letter}}"></span></div>
+	</li>
+</script>
 <script type="text/ng-template" id="tab-bar">
 	<nav class="tab-bar">
-		<div class="tab-bar-item" ng-click="selectType('nearby')" ng-class="{'is-active': isActiveType('nearby')}">
-			<span class="icon icon-location"></span>
-			<span class="tab-bar-item-label">Nearby</span>
-		</div>
-		<div class="tab-bar-item" ng-click="selectType('location')" ng-class="{'is-active': isActiveType('location')}">
-			<span class="icon icon-globe"></span>
-			<span class="tab-bar-item-label">Cities</span>
-		</div>
-		<div class="tab-bar-item" ng-click="selectType('friends')" ng-class="{'is-active': isActiveType('friends')}">
-			<span class="icon icon-friends"></span>
-			<span class="tab-bar-item-label">Friends</span>
-		</div>
+		<tab-bar-item-type ng-repeat="type in types"type="type"></tab-bar-item-type>
 		<div class="tab-bar-item">
 			<span class="tab-bar-divider"></span>
 		</div>
-		<div class="tab-bar-item" ng-click="selectGender('F')" ng-class="{'is-active': isActiveGender('F')}">
-			<span class="icon icon-female"></span>
-			<span class="tab-bar-item-label">Female</span>
-		</div>
-		<div class="tab-bar-item" ng-click="selectGender('M')" ng-class="{'is-active': isActiveGender('M')}">
-			<span class="icon icon-male"></span>
-			<span class="tab-bar-item-label">Male</span>
-		</div>
+		<tab-bar-item-gender ng-repeat="gender in genders" gender="gender"></tab-bar-item-gender>
 	</nav>
+</script>
+<script type="text/ng-template" id="tab-bar-item-type">
+	<div class="tab-bar-item" ng-click="makeActiveType()" ng-class="{'is-active': isActiveType()}">
+		<span class="icon icon-{{type.type}}"></span>
+		<span class="tab-bar-item-label">{{type.label}}</span>
+	</div>
+</script>
+<script type="text/ng-template" id="tab-bar-item-gender">
+	<div class="tab-bar-item" ng-click="makeActiveGender()" ng-class="{'is-active': isActiveGender()}">
+		<span class="icon icon-{{gender.label | lowercase}}"></span>
+		<span class="tab-bar-item-label">{{gender.label}}</span>
+	</div>
 </script>
 <script type="text/ng-template" id="filter-view">
 	<div class="filters-view is-visible">
@@ -105,52 +65,12 @@
 			<h1 class="title-bar-title">Filters</h1>
 		</header>
 		<h1 class="filters-view-header">Tap a filter to select.</h1>
-		<div class="filter filter--distance">
-			<div class="filter-label">Distance</div>
+		<div class="filter filter--distance" ng-class="{'is-active': isActive('radius_mi')}">
+			<div class="filter-label">Distance: {{filters.radius_mi.value}}</div>
 			<div class="filter-wrap">
-				<div class="filter-control">
+				<div class="filter-control" >
 					<div class="filter-select">
-						<select name="distance" id="distance" ng-model="filter.distance">
-							<option selected value="2">2 Miles</option>
-							<option value="5">5 Miles</option>
-							<option value="10">10 Miles</option>
-							<option value="20">20 Miles</option>
-							<option value="40">40 Miles</option>
-							<option value="80">80 Miles</option>
-							<option value="200">200 Miles</option>
-							<option value="500">500 Miles</option>
-							<option value="1000">1000 Miles</option>
-						</select>
-					</div>
-				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle"></div>
-				</div>
-			</div>
-		</div>
-		<div class="filter filter--age">
-			<div class="filter-label">Age</div>
-			<div class="filter-wrap">
-				<div class="filter-control">
-					<div class="filter-input filter-input-min">
-						<input type="number" name="age-min" id="age-min" min="18" value="18" onfocus="if(this.value == '18') { this.value = ''; }" onblur="if(this.value < 18) {this.value = '18'}" >
-					</div>
-					<div class="filter-input filter-input-max">
-						<input type="number" name="age-max" id="age-max" min="18" value="25" onfocus="if(this.value == '25') { this.value = ''; }"  onblur="if(this.value < 25) {this.value = '25'}">
-					</div>
-				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle"></div>
-				</div>
-			</div>
-		</div>
-		<div class="filter filter--occupation">
-			<div class="filter-label">Occupation</div>
-			<div class="filter-wrap">
-				<div class="filter-control">
-					<div class="filter-select">
-						<select name="occupation" id="occupation">
-							<option value="" disabled selected>Select an occupation</option>
+						<select name="distance" ng-focus="activateFilter('radius_mi')" id="distance" ng-model="filters.radius_mi.value">
 							<option value="2">2 Miles</option>
 							<option value="5">5 Miles</option>
 							<option value="10">10 Miles</option>
@@ -164,17 +84,57 @@
 					</div>
 				</div>
 				<div class="filter-toggle-wrap">
-					<div class="filter-toggle"></div>
+					<div class="filter-toggle" ng-click="toggleFilter('radius_mi')"></div>
 				</div>
 			</div>
 		</div>
-		<div class="filter filter--occupation">
+		<div class="filter filter--age" ng-class="{'is-active': isActive('age_min') && isActive('age_max')}">
+			<div class="filter-label">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
+			<div class="filter-wrap">
+				<div class="filter-control">
+					<div class="filter-input filter-input-min">
+						<input type="number" name="age-min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-placeholder="{18}" ng-model="filters.age_min.value">
+					</div>
+					<div class="filter-input filter-input-max">
+						<input type="number" name="age-max" id="age-max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
+					</div>
+				</div>
+				<div class="filter-toggle-wrap">
+					<div class="filter-toggle" ng-click="toggleFilter('age_min'); toggleFilter('age_max')"></div>
+				</div>
+			</div>
+		</div>
+		<div class="filter filter--occupation" ng-class="{'is-active': isActive('occupation')}">
+			<div class="filter-label">Occupation</div>
+			<div class="filter-wrap">
+				<div class="filter-control">
+					<div class="filter-select">
+						<select name="occupation" ng-focus="activateFilter('occupation')" id="occupation">
+							<option value="">Select an occupation</option>
+							<option value="2">2 Miles</option>
+							<option value="5">5 Miles</option>
+							<option value="10">10 Miles</option>
+							<option value="20">20 Miles</option>
+							<option value="40">40 Miles</option>
+							<option value="80">80 Miles</option>
+							<option value="200">200 Miles</option>
+							<option value="500">500 Miles</option>
+							<option value="1000">1000 Miles</option>
+						</select>
+					</div>
+				</div>
+				<div class="filter-toggle-wrap">
+					<div class="filter-toggle" ng-click="toggleFilter('occupation')"></div>
+				</div>
+			</div>
+		</div>
+		<div class="filter filter--religion" ng-class="{'is-active': isActive('religion')}">
 			<div class="filter-label">Religion</div>
 			<div class="filter-wrap">
 				<div class="filter-control">
 					<div class="filter-select">
-						<select name="religion" id="religion">
-							<option value="" disabled selected>Select a religion</option>
+						<select name="religion" ng-focus="activateFilter('religion')" id="religion">
+							<option value="">Select a religion</option>
 							<option value="agnostic">Agnostic</option>
 							<option value="atheist">Atheist</option>
 							<option value="buddhist">Buddhist</option>
@@ -191,16 +151,17 @@
 					</div>
 				</div>
 				<div class="filter-toggle-wrap">
-					<div class="filter-toggle"></div>
+					<div class="filter-toggle" ng-click="toggleFilter('religion')"></div>
 				</div>
 			</div>
 		</div>
+		{{activeFilters}}
 		<div class="filters-view-buttons">
 			<div class="filters-view-button-wrap">
-				<div class="button button-radius button-ghost button-cancel">Cancel</div>
+				<div class="button button-radius button-ghost button-cancel" ng-click="resetFilters()">Cancel</div>
 			</div>
 			<div class="filters-view-button-wrap">
-				<div class="button button-radius button-fill button-apply is-disabled">Apply</div>
+				<div class="button button-radius button-fill button-apply" ng-class="{'is-disabled': numActiveFilters === 0}" ng-click="pushActiveFilters()">Apply</div>
 			</div>
 		</div>
 	</div>

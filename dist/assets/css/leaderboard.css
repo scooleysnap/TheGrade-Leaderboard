@@ -45,7 +45,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   /* Icon Defs ===========*/
 }
-.icon-globe:before {
+.icon-nearby:before {
   content: "\e901";
 }
 .icon-female:before {

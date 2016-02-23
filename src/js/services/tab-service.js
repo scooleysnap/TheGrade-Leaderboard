@@ -1,26 +1,38 @@
 'use strict';
 
 module.exports = function($rootScope){
-	var _types = ['nearby', 'location', 'friends'];
-	var _genders = ['B', 'M', 'F'];
-
-	//default values
-	this.activeType = 'nearby';
-	this.activeGender = 'F';
-
-	this.setActiveType = function(type){
-		if(_types.indexOf(type) >= 0 && type != this.activeType) {
-			this.activeType = type;
-			$rootScope.$broadcast('tabService::activeTypeUpdated', type);
+	var _types = [
+		{
+			'type':'nearby',
+			'label': 'nearby'
+		},
+		{
+			'type':'location',
+			'label': 'cities'
+		},
+		{
+			'type':'friends',
+			'label': 'friends'
 		}
-	}
+	];
 
-	this.setActiveGender = function(gender){
-		if(_genders.indexOf(gender) >= 0 && gender != this.activeGender) {
-			this.activeGender = gender;
-			$rootScope.$broadcast('tabService::activeGenderUpdated', gender);
-			
-		}
+	var _genders = [
+		{
+			'gender': 'F',
+			'label': 'Female'
+		},
+		{
+			'gender': 'M',
+			'label': 'Male'
+		},
+	];
+
+	this.getTypes = function(){
+		return _types;
+	};
+
+	this.getGenders = function(){
+		return _genders
 	}
 
 };

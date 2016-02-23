@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function($rootScope, tabService, filterService){
+module.exports = function($rootScope, TabService, FilterService){
 	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
 	_fbid = '48611106',
 	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
