@@ -31,9 +31,7 @@ module.exports = function(TabService) {
 
 			scope.types = TabService.getTypes();
 			scope.genders = TabService.getGenders();
-			//set init
-			scope.activeType = 'nearby';
-			scope.activeGender = 'F';
+
 
 		}
 	};

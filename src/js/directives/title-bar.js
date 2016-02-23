@@ -2,6 +2,9 @@
 
 module.exports = function() {
 	return {
-		templateUrl: 'title-bar'
+		templateUrl: 'title-bar',
+		scope: {
+			showFilters: '&'
+		}
 	}
 }

@@ -31460,6 +31460,43 @@ module.exports = function($scope, $rootScope, DataService){
 	
 	$scope.users = DataService.fetchData();
 
+	//Set initial states
+	$scope.activeType = 'nearby';
+	$scope.activeGender = 'F';
+	$scope.activeFilters = {};
+	$scope.activeCity = 'Atlanta';
+
+	// hide filters by default
+	$scope.filtersAreVisible = false;
+
+	$scope.showFilters = function(){
+		$scope.filtersAreVisible = true;
+	}
+
+	$scope.hideFilters = function(){
+		$scope.filtersAreVisible = false;
+	}
+
+	//hide cities by default
+
+	$scope.citiesAreVisible = function(){
+		if ($scope.activeType === 'location'){
+			return true;
+		}
+		return false;
+	};
+
+	$scope.citiesAreUp = true;
+
+	$scope.toggleCityList = function(){
+		if ($scope.citiesAreUp){
+			scope.citiesAreUp = false;
+		}
+	}
+
+
+
+
 };
 },{}],6:[function(require,module,exports){
 'use strict';
@@ -31474,15 +31511,49 @@ angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$sc
 module.exports = function() {
 	return {
 		replace: true,
+		restrict: "E",
+		scope: {
+			activeType: "=",
+			activeCity: "=",
+			citiesAreVisible: '=',
+			citiesAreUp: '='
+		},
+		templateUrl: 'city-list',
+		controller: function ($scope){
+			$scope.setActiveCity = function(city){
+				$scope.activeCity = city;
+			}
+		},
+		link: function (scope, elem, attrs){
+
+			scope.cities = ['Chicago', 'New York', 'Los Angeles'];
+
+
+
+		}
+	};
+};
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+module.exports = function() {
+	return {
+		replace: true,
 		restirct: "E",
-		scope: {},
+		scope: {
+			filtersAreVisible: '=',
+			activeType: '=',
+			hideFilters: '&',
+			activeFilters: '='
+		},
 		templateUrl: 'filter-view',
 		controller: function ($scope){
 
 		},
 		link: function (scope, elem, attrs){
 			scope.numActiveFilters = 0;
-			scope.activeFilters = {};
+			scope.errorFilters = [];
 			scope.filters = {
 				'radius_mi': {
 					'value': '2',
@@ -31510,6 +31581,19 @@ module.exports = function() {
 				return scope.filters[filter].isActive;
 			};
 
+			scope.hideDistance = function(){
+				if (scope.activeType === 'location'){
+					scope.filters.radius_mi.isActive = false;
+					
+					if (scope.activeFilters['radius_mi']) {
+						delete scope.activeFilters['radius_mi'];
+					}
+					
+					return true;
+				}
+				return false;
+			}
+
 			scope.activateFilter = function(filter){
 				if (!scope.isActive(filter)){
 					scope.filters[filter].isActive = true;
@@ -31527,35 +31611,78 @@ module.exports = function() {
 				}
 			};
 
-			scope.resetFilters = function(){
+			scope.cancelFilters = function(){
 				for (var key in scope.filters){
 					scope.filters[key].isActive = false;
 				}
 				scope.numActiveFilters = 0;
+				scope.activeFilters = {};
+				scope.hideFilters();
 			};
+
+			scope.validateFilters = function(){
+
+			}
 
 			scope.pushActiveFilters = function(){
 				if (scope.numActiveFilters > 0){
 					
 					scope.activeFilters = {};
+					scope.errorFilters = [];
+					//make sure min age is less than max age
+					if(scope.filters.age_min.isActive && scope.filters.age_max.isActive){
+							
+							if (scope.filters.age_min.value >= scope.filters.age_max.value) {
+								scope.errorFilters.push('Max age is less than min age');	
+							}
+
+							if (scope.filtersForm.age_min.$error.min || scope.filtersForm.age_max.$error.min || scope.filtersForm.age_min.$error.max || scope.filtersForm.age_max.$error.max){
+								scope.errorFilters.push('Age must be between 18 and 100');	
+							}
+							
+					}
+
+
 					
 					for (var key in scope.filters){
 						
 						if (scope.filters[key].isActive === true){
-							scope.activeFilters[key] = scope.filters[key].value;
+
+							// check for blank strings in options
+							if (scope.filters[key].value !== ''){
+						
+								scope.activeFilters[key] = scope.filters[key].value;
+
+							} else {
+
+								scope.errorFilters.push(key + ' - select value');
+
+							}
+
 							
-						}
+						} 
 					}
 
-					console.log(scope.activeFilters);
+
+					if (scope.errorFilters.length > 0){
+						alert('Please fix or remove the following filters: \n' + scope.errorFilters.join('\n'));
+					} else {
+						scope.hideFilters();	
+					}
+
+					
 				}
 			};
+
+			scope.onApply = function(){
+
+			}
 
 		}
 	};
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 require('angular');
@@ -31566,8 +31693,9 @@ angular.module('TheGrade.Leaderboard').directive('leaderboardItem', require('./l
 angular.module('TheGrade.Leaderboard').directive('tabBarItemType', require('./tab-bar-item-type'));
 angular.module('TheGrade.Leaderboard').directive('tabBarItemGender', require('./tab-bar-item-gender'));
 angular.module('TheGrade.Leaderboard').directive('filterView', ['FilterService', require('./filter-view')]);
+angular.module('TheGrade.Leaderboard').directive('cityList', require('./city-list'));
 
-},{"./filter-view":7,"./leaderboard-item":9,"./tab-bar":12,"./tab-bar-item-gender":10,"./tab-bar-item-type":11,"./title-bar":13,"angular":4}],9:[function(require,module,exports){
+},{"./city-list":7,"./filter-view":8,"./leaderboard-item":10,"./tab-bar":13,"./tab-bar-item-gender":11,"./tab-bar-item-type":12,"./title-bar":14,"angular":4}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -31588,7 +31716,7 @@ module.exports = function() {
 		}
 	};
 };
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -31613,7 +31741,7 @@ module.exports = function() {
 		}
 	};
 };
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -31639,7 +31767,7 @@ module.exports = function() {
 	};
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = function(TabService) {
@@ -31673,23 +31801,24 @@ module.exports = function(TabService) {
 
 			scope.types = TabService.getTypes();
 			scope.genders = TabService.getGenders();
-			//set init
-			scope.activeType = 'nearby';
-			scope.activeGender = 'F';
+
 
 		}
 	};
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
 	return {
-		templateUrl: 'title-bar'
+		templateUrl: 'title-bar',
+		scope: {
+			showFilters: '&'
+		}
 	}
 }
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 require('angular');
@@ -31709,7 +31838,7 @@ require('./services');
 require('./controllers');
 require('./directives');
 
-},{"./controllers":6,"./directives":8,"./services":17,"angular":4,"angular-route":2}],15:[function(require,module,exports){
+},{"./controllers":6,"./directives":9,"./services":18,"angular":4,"angular-route":2}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = function(){
@@ -32621,7 +32750,7 @@ module.exports = function(){
 	};
 
 };
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function(){
@@ -32645,7 +32774,7 @@ module.exports = function(){
 
 	this.activeFilters = _activeFilters;
 };
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 require('angular');
@@ -32655,7 +32784,7 @@ angular.module('TheGrade.Leaderboard').service('DataService', ['$rootScope', req
 angular.module('TheGrade.Leaderboard').service('FilterService', ['$rootScope', require('./request-service')]);
 angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'TabService', 'FilterService', require('./filter-service')]);
 
-},{"./data-service":15,"./filter-service":16,"./request-service":18,"./tab-service":19,"angular":4}],18:[function(require,module,exports){
+},{"./data-service":16,"./filter-service":17,"./request-service":19,"./tab-service":20,"angular":4}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = function($rootScope, TabService, FilterService){
@@ -32706,7 +32835,7 @@ module.exports = function($rootScope, TabService, FilterService){
 	};
 
 };
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function($rootScope){
@@ -32745,4 +32874,4 @@ module.exports = function($rootScope){
 	}
 
 };
-},{}]},{},[14]);
+},{}]},{},[15]);

@@ -8,3 +8,4 @@ angular.module('TheGrade.Leaderboard').directive('leaderboardItem', require('./l
 angular.module('TheGrade.Leaderboard').directive('tabBarItemType', require('./tab-bar-item-type'));
 angular.module('TheGrade.Leaderboard').directive('tabBarItemGender', require('./tab-bar-item-gender'));
 angular.module('TheGrade.Leaderboard').directive('filterView', ['FilterService', require('./filter-view')]);
+angular.module('TheGrade.Leaderboard').directive('cityList', require('./city-list'));

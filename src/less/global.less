@@ -9,6 +9,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	touch-action: manipulation;
+	-webkit-overflow-scrolling: touch;
 }
 
 .page-wrap {
@@ -19,8 +20,13 @@ body {
 
 .scroll-wrap {
 	height: 100%;
-	padding-top: @title-bar-height;
-	padding-bottom: @tab-bar-height;
+	width: 100%;
+	position: absolute;
+	z-index: 2;
+	top: @title-bar-height;
+	bottom: @tab-bar-height;
 	box-sizing: border-box;
 	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	
 }

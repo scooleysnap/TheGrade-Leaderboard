@@ -11,20 +11,21 @@
 </body>
 
 <script type="text/ng-template" id="leaderboard-view">	
-	<title-bar></title-bar>
+	<title-bar show-filters="showFilters()"></title-bar>
 	<div class="scroll-wrap">
 		<ul class="leaderboard">
 			<leaderboard-item ng-repeat="user in users"></leaderboard-item>
 		</ul>
 	</div>
 	<tab-bar active-type="activeType" active-gender="activeGender"></tab-bar>
-	<filter-view></filter-view>
+	<filter-view filters-are-visible="filtersAreVisible" hide-filters="hideFilters()" active-type="activeType" active-filters="activeFilters"></filter-view>
+	<city-list active-type="activeType" active-city="activeCity" cities-are-visible="citiesAreVisible"></city-list>
 </script>
 <script type="text/ng-template" id="title-bar">
 	<header class="title-bar title-bar-fixed">
 		<div class="button button-close"><span class="icon icon-x"></span></div>
 		<h1 class="title-bar-title">Nearby</h1>
-		<div class="button button-radius button-ghost button-filter">Filter <span class="icon icon-settings"></span></div>
+		<div class="button button-radius button-ghost button-filter" ng-click="showFilters()">Filter <span class="icon icon-settings"></span></div>
 	</header>
 </script>
 <script type="text/ng-template" id="leaderboard-item">
@@ -59,111 +60,154 @@
 		<span class="tab-bar-item-label">{{gender.label}}</span>
 	</div>
 </script>
+<script type="text/ng-template" id="city-list">
+	<div class="city-select is-up" ng-show="citiesAreVisible()">
+		<div class="city-select-toggle">Select City</div>
+		<h2 class="city-select-header">Select a city to view its leaderboard</h2>
+		<div class="city-list-scroll-wrap">
+			<ul class="city-list">
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+				<li class="city-list-item" ng-click="setActiveCity('chicago')">Chicago</li>
+				<li class="city-list-item" ng-click="setActiveCity('new_york')">New York</li>
+				<li class="city-list-item" ng-click="setActiveCity('los_angeles')">Los Angeles</li>
+			</ul>
+			{{activeCity}}
+		</div>
+	</div>
+</script>
 <script type="text/ng-template" id="filter-view">
-	<div class="filters-view is-visible">
+	<div class="filters-view" ng-class="{'is-visible': filtersAreVisible}">
 		<header class="title-bar">
 			<h1 class="title-bar-title">Filters</h1>
 		</header>
 		<h1 class="filters-view-header">Tap a filter to select.</h1>
-		<div class="filter filter--distance" ng-class="{'is-active': isActive('radius_mi')}">
-			<div class="filter-label">Distance: {{filters.radius_mi.value}}</div>
-			<div class="filter-wrap">
-				<div class="filter-control" >
-					<div class="filter-select">
-						<select name="distance" ng-focus="activateFilter('radius_mi')" id="distance" ng-model="filters.radius_mi.value">
-							<option value="2">2 Miles</option>
-							<option value="5">5 Miles</option>
-							<option value="10">10 Miles</option>
-							<option value="20">20 Miles</option>
-							<option value="40">40 Miles</option>
-							<option value="80">80 Miles</option>
-							<option value="200">200 Miles</option>
-							<option value="500">500 Miles</option>
-							<option value="1000">1000 Miles</option>
-						</select>
+		<form action="" name="filtersForm">
+			<div class="filter filter--distance" ng-hide="hideDistance()" ng-class="{'is-active': isActive('radius_mi')}">
+				<div class="filter-label">Distance: {{filters.radius_mi.value}}</div>
+				<div class="filter-wrap">
+					<div class="filter-control" >
+						<div class="filter-select">
+							<select name="radius_mi" ng-focus="activateFilter('radius_mi')" id="radius_mi" ng-model="filters.radius_mi.value">
+								<option value="2">2 Miles</option>
+								<option value="5">5 Miles</option>
+								<option value="10">10 Miles</option>
+								<option value="20">20 Miles</option>
+								<option value="40">40 Miles</option>
+								<option value="80">80 Miles</option>
+								<option value="200">200 Miles</option>
+								<option value="500">500 Miles</option>
+								<option value="1000">1000 Miles</option>
+							</select>
+						</div>
+					</div>
+					<div class="filter-toggle-wrap">
+						<div class="filter-toggle" ng-click="toggleFilter('radius_mi')"></div>
 					</div>
 				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle" ng-click="toggleFilter('radius_mi')"></div>
-				</div>
 			</div>
-		</div>
-		<div class="filter filter--age" ng-class="{'is-active': isActive('age_min') && isActive('age_max')}">
-			<div class="filter-label">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
-			<div class="filter-wrap">
-				<div class="filter-control">
-					<div class="filter-input filter-input-min">
-						<input type="number" name="age-min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-placeholder="{18}" ng-model="filters.age_min.value">
+			<div class="filter filter--age" ng-class="{'is-active': isActive('age_min') && isActive('age_max')}">
+				<div class="filter-label">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
+				<div class="filter-wrap">
+					<div class="filter-control">
+						<div class="filter-input filter-input-min">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min.value">
+						</div>
+						<div class="filter-input filter-input-max">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
+						</div>
 					</div>
-					<div class="filter-input filter-input-max">
-						<input type="number" name="age-max" id="age-max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
-					</div>
-				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle" ng-click="toggleFilter('age_min'); toggleFilter('age_max')"></div>
-				</div>
-			</div>
-		</div>
-		<div class="filter filter--occupation" ng-class="{'is-active': isActive('occupation')}">
-			<div class="filter-label">Occupation</div>
-			<div class="filter-wrap">
-				<div class="filter-control">
-					<div class="filter-select">
-						<select name="occupation" ng-focus="activateFilter('occupation')" id="occupation">
-							<option value="">Select an occupation</option>
-							<option value="2">2 Miles</option>
-							<option value="5">5 Miles</option>
-							<option value="10">10 Miles</option>
-							<option value="20">20 Miles</option>
-							<option value="40">40 Miles</option>
-							<option value="80">80 Miles</option>
-							<option value="200">200 Miles</option>
-							<option value="500">500 Miles</option>
-							<option value="1000">1000 Miles</option>
-						</select>
+					<div class="filter-toggle-wrap">
+						<div class="filter-toggle" ng-click="toggleFilter('age_min'); toggleFilter('age_max')"></div>
 					</div>
 				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle" ng-click="toggleFilter('occupation')"></div>
-				</div>
 			</div>
-		</div>
-		<div class="filter filter--religion" ng-class="{'is-active': isActive('religion')}">
-			<div class="filter-label">Religion</div>
-			<div class="filter-wrap">
-				<div class="filter-control">
-					<div class="filter-select">
-						<select name="religion" ng-focus="activateFilter('religion')" id="religion">
-							<option value="">Select a religion</option>
-							<option value="agnostic">Agnostic</option>
-							<option value="atheist">Atheist</option>
-							<option value="buddhist">Buddhist</option>
-							<option value="christian_catholic">Christian Catholic</option>
-							<option value="christian_mormon">Christian Mormon</option>
-							<option value="christian_protestant">Christian Protestant</option>
-							<option value="christian_other">Christian Other</option>
-							<option value="hindu">Hindu</option>
-							<option value="jewish">Jewish</option>
-							<option value="muslim">Muslim</option>
-							<option value="spiritual">Spiritual</option>
-							<option value="other">Other</option>
-						</select>
+			<div class="filter filter--occupation" ng-class="{'is-active': isActive('occupation')}">
+				<div class="filter-label">Occupation</div>
+				<div class="filter-wrap">
+					<div class="filter-control">
+						<div class="filter-select">
+							<select name="occupation" ng-model="filters.occupation.value" ng-focus="activateFilter('occupation')" id="occupation">
+								<option value="">Select an occupation</option>
+								<option value="2">2 Miles</option>
+								<option value="5">5 Miles</option>
+								<option value="10">10 Miles</option>
+								<option value="20">20 Miles</option>
+								<option value="40">40 Miles</option>
+								<option value="80">80 Miles</option>
+								<option value="200">200 Miles</option>
+								<option value="500">500 Miles</option>
+								<option value="1000">1000 Miles</option>
+							</select>
+						</div>
+					</div>
+					<div class="filter-toggle-wrap">
+						<div class="filter-toggle" ng-click="toggleFilter('occupation')"></div>
 					</div>
 				</div>
-				<div class="filter-toggle-wrap">
-					<div class="filter-toggle" ng-click="toggleFilter('religion')"></div>
+			</div>
+			<div class="filter filter--religion" ng-class="{'is-active': isActive('religion')}">
+				<div class="filter-label">Religion</div>
+				<div class="filter-wrap">
+					<div class="filter-control">
+						<div class="filter-select">
+							<select name="religion" ng-focus="activateFilter('religion')" ng-model="filters.religion.value" id="religion">
+								<option value="">Select a religion</option>
+								<option value="agnostic">Agnostic</option>
+								<option value="atheist">Atheist</option>
+								<option value="buddhist">Buddhist</option>
+								<option value="christian_catholic">Christian Catholic</option>
+								<option value="christian_mormon">Christian Mormon</option>
+								<option value="christian_protestant">Christian Protestant</option>
+								<option value="christian_other">Christian Other</option>
+								<option value="hindu">Hindu</option>
+								<option value="jewish">Jewish</option>
+								<option value="muslim">Muslim</option>
+								<option value="spiritual">Spiritual</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+					</div>
+					<div class="filter-toggle-wrap">
+						<div class="filter-toggle" ng-click="toggleFilter('religion')"></div>
+					</div>
 				</div>
 			</div>
-		</div>
-		{{activeFilters}}
-		<div class="filters-view-buttons">
-			<div class="filters-view-button-wrap">
-				<div class="button button-radius button-ghost button-cancel" ng-click="resetFilters()">Cancel</div>
+			{{activeFilters}}
+			<div class="filters-view-buttons">
+				<div class="filters-view-button-wrap">
+					<div class="button button-radius button-ghost button-cancel" ng-click="cancelFilters()">{{numActiveFilters > 0 ? "Clear" : "Cancel"}}</div>
+				</div>
+				<div class="filters-view-button-wrap">
+					<div class="button button-radius button-fill button-apply" ng-class="{'is-disabled': numActiveFilters === 0}" ng-click="pushActiveFilters()">Apply</div>
+				</div>
 			</div>
-			<div class="filters-view-button-wrap">
-				<div class="button button-radius button-fill button-apply" ng-class="{'is-disabled': numActiveFilters === 0}" ng-click="pushActiveFilters()">Apply</div>
-			</div>
-		</div>
+		</form>
 	</div>
 </script>
 </html>
