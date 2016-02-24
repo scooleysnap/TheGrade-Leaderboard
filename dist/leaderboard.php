@@ -208,7 +208,7 @@
 					<div class="button button-radius button-ghost button-cancel" ng-click="cancelFilters()">{{numActiveFilters > 0 ? "Clear" : "Cancel"}}</div>
 				</div>
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-fill button-apply" ng-class="{'is-disabled': numActiveFilters === 0}" ng-click="pushActiveFilters()">Apply</div>
+					<div class="button button-radius button-fill button-apply" ng-click="pushActiveFilters()">Apply</div>
 				</div>
 			</div>
 		</form>

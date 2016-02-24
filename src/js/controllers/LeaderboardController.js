@@ -49,7 +49,7 @@ module.exports = function($scope, $rootScope, DataService){
 		$scope.filtersAreVisible = false;
 	}
 
-	//event handling 
+	//event handling for data
 	$rootScope.$on("tabBar::activeTypeUpdated", function(event, data){
 		console.log(DataService.requestUrl());
 		getData();
@@ -62,6 +62,7 @@ module.exports = function($scope, $rootScope, DataService){
 
 	$rootScope.$on("cityList::activeCityUpdated", function(event, data){
 		console.log(DataService.requestUrl());
+		getData();
 	});
 
 	$rootScope.$on("filters::activeFiltersUpdated", function(event, data){

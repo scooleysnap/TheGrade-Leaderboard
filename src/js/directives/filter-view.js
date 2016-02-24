@@ -50,6 +50,7 @@ module.exports = function(FilterService, DataService) {
 					
 					if (scope.activeFilters['radius_mi']) {
 						delete scope.activeFilters['radius_mi'];
+						scope.numActiveFilters --;
 					}
 					
 					return true;
@@ -75,12 +76,6 @@ module.exports = function(FilterService, DataService) {
 			};
 
 			scope.cancelFilters = function(){
-				for (var key in scope.filters){
-					scope.filters[key].isActive = false;
-				}
-				scope.numActiveFilters = 0;
-				scope.activeFilters = {};
-				DataService.setActiveFilters(scope.activeFilters);
 				scope.hideFilters();
 			};
 
@@ -127,18 +122,17 @@ module.exports = function(FilterService, DataService) {
 						} 
 					}
 
-
-
-
-					if (scope.errorFilters.length > 0){
-						alert('Please fix or remove the following filters: \n' + scope.errorFilters.join('\n'));
-					} else {
-
-						DataService.setActiveFilters(scope.activeFilters);
-						scope.hideFilters();	
-					}
-
 					
+				} else {
+					scope.activeFilters = {};
+				}
+
+				if (scope.errorFilters.length > 0){
+					alert('Please fix or remove the following filters: \n' + scope.errorFilters.join('\n'));
+				} else {
+
+					DataService.setActiveFilters(scope.activeFilters);
+					scope.hideFilters();	
 				}
 			};
 
