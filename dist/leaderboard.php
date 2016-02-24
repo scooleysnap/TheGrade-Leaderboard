@@ -1,10 +1,14 @@
+<?php 
+
+//require_once __DIR__ . '/../../bootstrap.php';
+
+ ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="TheGrade.Leaderboard">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="assets/css/leaderboard.css">
-	<script src="assets/js/leaderboard.js"></script>
 </head>
 <body ontouchstart>
 	<div class="page-wrap" ng-view></div>
@@ -13,7 +17,7 @@
 <script type="text/ng-template" id="leaderboard-view">	
 	<title-bar show-filters="showFilters()" cities-are-up="citiesAreUp()" active-type="activeType" active-city="activeCity"></title-bar>
 	<div class="scroll-wrap">
-		<ul class="leaderboard">
+		<ul class="leaderboard" ng-class="{'is-loading': isLoading()}">
 			<leaderboard-item ng-repeat="user in users"></leaderboard-item>
 		</ul>
 	</div>
@@ -210,4 +214,12 @@
 		</form>
 	</div>
 </script>
+<script>
+	(function (window) {
+	    window.theGrade = {};
+	    window.theGrade.fbid = '48611106';
+	    window.theGrade.proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
+	})(window);
+</script>
+<script src="assets/js/leaderboard.js"></script>
 </html>

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function() {
+module.exports = function(DataService) {
 	return {
 		replace: true,
 		restrict: "E",
@@ -13,6 +13,7 @@ module.exports = function() {
 		controller: function ($scope){
 			$scope.setActiveCity = function(city){
 				$scope.activeCity = city;
+				DataService.setActiveCity(city);
 				$scope.toggleCityList();
 			};
 

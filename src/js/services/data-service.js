@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports = function($rootscope){
+module.exports = function($rootscope, $http){
 	
   var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
-  _proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc',
-  _fbid = '48611106',
+  _proxAuth = window.theGrade.proxAuth,
+  _fbid = window.theGrade.fbid,
   _activeType = '',
   _activeGender = '',
   _activeCity = '',
@@ -31,7 +31,9 @@ module.exports = function($rootscope){
 
   this.setActiveFilters = function(filters){
     _activeFilters = filters;
-    $rootscope.$emit('filters::activeFiltersUpdated', filters);
+    if (filters !== {}){
+      $rootscope.$emit('filters::activeFiltersUpdated', filters);
+    }
   }
 
   function makeUrl(){
@@ -47,13 +49,17 @@ module.exports = function($rootscope){
     }
 
     if (Object.keys(_activeFilters).length > 0){
-      for (var key in _ActiveFilters){
+      for (var key in _activeFilters){
         _url += '&' + key + '=' + _activeFilters[key];
       }
     }
 
     return _url;
 
+  }
+
+  this.fetchData = function(){
+    return $http({method: "GET", url: makeUrl()});
   }
 
   this.requestUrl = function(){

@@ -31462,6 +31462,7 @@ module.exports = function($scope, $rootScope, DataService){
 	$scope.activeGender = 'F';
 	$scope.activeFilters = {};
 	$scope.activeCity = '';
+	var loading = true;
 
 	//set up init data service
 	DataService.setActiveType($scope.activeType);
@@ -31470,6 +31471,27 @@ module.exports = function($scope, $rootScope, DataService){
 	DataService.setActiveFilters($scope.activeFilters);
 
 	console.log(DataService.requestUrl());
+
+	function getData(){
+		//set loading
+		loading = true;
+		//get data
+		DataService.fetchData().success(function(data){
+			$scope.users = data.data.rankings;
+			loading = false;
+		});
+		
+	}
+
+	$scope.isLoading = function(){
+		return loading;
+	}
+
+	//fetch initial data
+	getData();
+
+
+
 
 
 	// hide filters by default
@@ -31486,10 +31508,21 @@ module.exports = function($scope, $rootScope, DataService){
 	//event handling 
 	$rootScope.$on("tabBar::activeTypeUpdated", function(event, data){
 		console.log(DataService.requestUrl());
+		getData();
 	});
 
 	$rootScope.$on("tabBar::activeGenderUpdated", function(event, data){
 		console.log(DataService.requestUrl());
+		getData();
+	});
+
+	$rootScope.$on("cityList::activeCityUpdated", function(event, data){
+		console.log(DataService.requestUrl());
+	});
+
+	$rootScope.$on("filters::activeFiltersUpdated", function(event, data){
+		console.log(DataService.requestUrl());
+		getData();
 	});
 };
 },{}],6:[function(require,module,exports){
@@ -31502,7 +31535,7 @@ angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$sc
 },{"./LeaderboardController":5,"angular":4}],7:[function(require,module,exports){
 'use strict';
 
-module.exports = function() {
+module.exports = function(DataService) {
 	return {
 		replace: true,
 		restrict: "E",
@@ -31515,6 +31548,7 @@ module.exports = function() {
 		controller: function ($scope){
 			$scope.setActiveCity = function(city){
 				$scope.activeCity = city;
+				DataService.setActiveCity(city);
 				$scope.toggleCityList();
 			};
 
@@ -31645,6 +31679,7 @@ module.exports = function(FilterService, DataService) {
 				}
 				scope.numActiveFilters = 0;
 				scope.activeFilters = {};
+				DataService.setActiveFilters(scope.activeFilters);
 				scope.hideFilters();
 			};
 
@@ -31721,7 +31756,7 @@ angular.module('TheGrade.Leaderboard').directive('leaderboardItem', require('./l
 angular.module('TheGrade.Leaderboard').directive('tabBarItemType', require('./tab-bar-item-type'));
 angular.module('TheGrade.Leaderboard').directive('tabBarItemGender', require('./tab-bar-item-gender'));
 angular.module('TheGrade.Leaderboard').directive('filterView', ['FilterService', 'DataService', require('./filter-view')]);
-angular.module('TheGrade.Leaderboard').directive('cityList', require('./city-list'));
+angular.module('TheGrade.Leaderboard').directive('cityList', ['DataService', require('./city-list')]);
 
 },{"./city-list":7,"./filter-view":8,"./leaderboard-item":10,"./tab-bar":13,"./tab-bar-item-gender":11,"./tab-bar-item-type":12,"./title-bar":14,"angular":4}],10:[function(require,module,exports){
 'use strict';
@@ -31906,11 +31941,11 @@ require('./directives');
 },{"./controllers":6,"./directives":9,"./services":18,"angular":4,"angular-route":2}],16:[function(require,module,exports){
 'use strict';
 
-module.exports = function($rootscope){
+module.exports = function($rootscope, $http){
 	
   var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
-  _proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc',
-  _fbid = '48611106',
+  _proxAuth = window.theGrade.proxAuth,
+  _fbid = window.theGrade.fbid,
   _activeType = '',
   _activeGender = '',
   _activeCity = '',
@@ -31937,7 +31972,9 @@ module.exports = function($rootscope){
 
   this.setActiveFilters = function(filters){
     _activeFilters = filters;
-    $rootscope.$emit('filters::activeFiltersUpdated', filters);
+    if (filters !== {}){
+      $rootscope.$emit('filters::activeFiltersUpdated', filters);
+    }
   }
 
   function makeUrl(){
@@ -31953,13 +31990,17 @@ module.exports = function($rootscope){
     }
 
     if (Object.keys(_activeFilters).length > 0){
-      for (var key in _ActiveFilters){
+      for (var key in _activeFilters){
         _url += '&' + key + '=' + _activeFilters[key];
       }
     }
 
     return _url;
 
+  }
+
+  this.fetchData = function(){
+    return $http({method: "GET", url: makeUrl()});
   }
 
   this.requestUrl = function(){
@@ -31997,7 +32038,7 @@ module.exports = function(){
 require('angular');
 
 angular.module('TheGrade.Leaderboard').service('TabService', ['$rootScope', require('./tab-service')]);
-angular.module('TheGrade.Leaderboard').service('DataService', ['$rootScope', require('./data-service')]);
+angular.module('TheGrade.Leaderboard').service('DataService', ['$rootScope', '$http', require('./data-service')]);
 angular.module('TheGrade.Leaderboard').service('FilterService', ['$rootScope', require('./request-service')]);
 angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'TabService', 'FilterService', require('./filter-service')]);
 

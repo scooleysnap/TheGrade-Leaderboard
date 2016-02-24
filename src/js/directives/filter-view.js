@@ -80,6 +80,7 @@ module.exports = function(FilterService, DataService) {
 				}
 				scope.numActiveFilters = 0;
 				scope.activeFilters = {};
+				DataService.setActiveFilters(scope.activeFilters);
 				scope.hideFilters();
 			};
 
