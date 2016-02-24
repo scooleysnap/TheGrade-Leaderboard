@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(TabService) {
+module.exports = function(TabService, DataService) {
 	return {
 		replace: true,
 		restrict: "E",
@@ -13,6 +13,7 @@ module.exports = function(TabService) {
 
 			this.setActiveType = function (type){
 				$scope.activeType = type;
+				DataService.setActiveType(type);
 			};
 
 			this.getActiveType = function() {
@@ -21,6 +22,7 @@ module.exports = function(TabService) {
 
 			this.setActiveGender = function(gender){
 				$scope.activeGender = gender;
+				DataService.setActiveGender(gender);
 			};
 
 			this.getActiveGender = function() {

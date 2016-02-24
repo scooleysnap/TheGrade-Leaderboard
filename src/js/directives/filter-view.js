@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function() {
+module.exports = function(FilterService, DataService) {
 	return {
 		replace: true,
 		restirct: "E",
@@ -127,9 +127,13 @@ module.exports = function() {
 					}
 
 
+
+
 					if (scope.errorFilters.length > 0){
 						alert('Please fix or remove the following filters: \n' + scope.errorFilters.join('\n'));
 					} else {
+
+						DataService.setActiveFilters(scope.activeFilters);
 						scope.hideFilters();	
 					}
 
