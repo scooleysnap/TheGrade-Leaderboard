@@ -30,8 +30,8 @@ body {
 }
 @font-face {
   font-family: 'TheGrade';
-  src: url('../fonts/TheGrade.eot?950pr8');
-  src: url('../fonts/TheGrade.eot?950pr8#iefix') format('embedded-opentype'), url('../fonts/TheGrade.ttf?950pr8') format('truetype'), url('../fonts/TheGrade.woff?950pr8') format('woff'), url('../fonts/TheGrade.svg?950pr8#TheGrade') format('svg');
+  src: url('../assets/fonts/TheGrade.eot?950pr8');
+  src: url('../assets/fonts/TheGrade.eot?950pr8#iefix') format('embedded-opentype'), url('../assets/fonts/TheGrade.ttf?950pr8') format('truetype'), url('../assets/fonts/TheGrade.woff?950pr8') format('woff'), url('../assets/fonts/TheGrade.svg?950pr8#TheGrade') format('svg');
   font-weight: normal;
   font-style: normal;
 }

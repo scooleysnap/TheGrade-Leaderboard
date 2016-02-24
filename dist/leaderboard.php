@@ -8,7 +8,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<link rel="stylesheet" href="assets/css/leaderboard.css">
+	<link rel="stylesheet" href="css/leaderboard.css">
 </head>
 <body ontouchstart>
 	<div class="page-wrap" ng-view></div>
@@ -221,5 +221,5 @@
 	    window.theGrade.proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
 	})(window);
 </script>
-<script src="assets/js/leaderboard.js"></script>
+<script src="js/leaderboard.js"></script>
 </html>
