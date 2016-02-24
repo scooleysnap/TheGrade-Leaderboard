@@ -137,10 +137,6 @@ module.exports = function() {
 				}
 			};
 
-			scope.onApply = function(){
-
-			}
-
 		}
 	};
 };

@@ -379,8 +379,8 @@ Layout/Appearance
   padding: 8px 0 8px 15px;
 }
 .city-select-toggle {
-  color: #96ca29;
-  background-color: #171819;
+  color: #171819;
+  background-color: #96ca29;
   border-bottom: 1px solid #323536;
   line-height: 24px;
   font-size: 13px;

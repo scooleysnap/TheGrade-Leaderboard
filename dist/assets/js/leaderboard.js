@@ -31464,7 +31464,7 @@ module.exports = function($scope, $rootScope, DataService){
 	$scope.activeType = 'nearby';
 	$scope.activeGender = 'F';
 	$scope.activeFilters = {};
-	$scope.activeCity = 'Atlanta';
+	$scope.activeCity = '';
 
 	// hide filters by default
 	$scope.filtersAreVisible = false;
@@ -31476,27 +31476,6 @@ module.exports = function($scope, $rootScope, DataService){
 	$scope.hideFilters = function(){
 		$scope.filtersAreVisible = false;
 	}
-
-	//hide cities by default
-
-	$scope.citiesAreVisible = function(){
-		if ($scope.activeType === 'location'){
-			return true;
-		}
-		return false;
-	};
-
-	$scope.citiesAreUp = true;
-
-	$scope.toggleCityList = function(){
-		if ($scope.citiesAreUp){
-			scope.citiesAreUp = false;
-		}
-	}
-
-
-
-
 };
 },{}],6:[function(require,module,exports){
 'use strict';
@@ -31515,14 +31494,48 @@ module.exports = function() {
 		scope: {
 			activeType: "=",
 			activeCity: "=",
-			citiesAreVisible: '=',
-			citiesAreUp: '='
+			citiesAreUp: '&'
 		},
 		templateUrl: 'city-list',
 		controller: function ($scope){
 			$scope.setActiveCity = function(city){
 				$scope.activeCity = city;
+				$scope.toggleCityList();
+			};
+
+
+			$scope.citiesAreVisible = function(){
+				if ($scope.activeType === 'location'){
+					return true;
+				}
+				return false;
+			};
+
+			var isUp = true;
+
+			$scope.citiesAreUp = function(){
+				if ($scope.activeCity === ''){
+					return true;
+				} else {
+					if (isUp === true){
+						return true;
+					} else {
+						return false;
+					}
+				}
 			}
+
+			$scope.toggleCityList = function(){
+				if($scope.activeCity === ''){
+					isUp = true;
+				} else {
+					if(isUp === true){
+						isUp = false;
+					} else {
+						isUp = true;
+					}
+				}
+			};
 		},
 		link: function (scope, elem, attrs){
 
@@ -31674,10 +31687,6 @@ module.exports = function() {
 				}
 			};
 
-			scope.onApply = function(){
-
-			}
-
 		}
 	};
 };
@@ -31813,8 +31822,43 @@ module.exports = function(TabService) {
 module.exports = function() {
 	return {
 		templateUrl: 'title-bar',
+		restrict: 'E',
+		replace: true,
 		scope: {
-			showFilters: '&'
+			showFilters: '&',
+			citiesAreUp: '&',
+			activeType: '=',
+			activeCity: '='
+		},
+		controller: function($scope){
+
+			$scope.disableFilterButton = function(){
+				if ($scope.citiesAreUp() === true){
+					return true;
+				}
+				return false;
+			}
+
+			var titleBarTitle = '';
+
+			$scope.getTitle = function(){
+				if($scope.activeType === 'location'){
+					if($scope.activeCity === ''){
+						titleBarTitle = 'Location';
+						return titleBarTitle;
+					} else {
+						titleBarTitle = $scope.activeCity.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function(key) { return key.toUpperCase()});
+						return titleBarTitle;
+					}
+				} else {
+					titleBarTitle = $scope.activeType.charAt(0).toUpperCase() + $scope.activeType.slice(1);
+					return titleBarTitle;
+				}
+			};
+
+		},
+		link: function(scope, elem, attrs){
+
 		}
 	}
 }

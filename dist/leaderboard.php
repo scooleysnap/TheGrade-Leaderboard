@@ -11,7 +11,7 @@
 </body>
 
 <script type="text/ng-template" id="leaderboard-view">	
-	<title-bar show-filters="showFilters()"></title-bar>
+	<title-bar show-filters="showFilters()" cities-are-up="citiesAreUp()" active-type="activeType" active-city="activeCity"></title-bar>
 	<div class="scroll-wrap">
 		<ul class="leaderboard">
 			<leaderboard-item ng-repeat="user in users"></leaderboard-item>
@@ -19,13 +19,13 @@
 	</div>
 	<tab-bar active-type="activeType" active-gender="activeGender"></tab-bar>
 	<filter-view filters-are-visible="filtersAreVisible" hide-filters="hideFilters()" active-type="activeType" active-filters="activeFilters"></filter-view>
-	<city-list active-type="activeType" active-city="activeCity" cities-are-visible="citiesAreVisible"></city-list>
+	<city-list active-type="activeType" active-city="activeCity" cities-are-up="citiesAreUp()"></city-list>
 </script>
 <script type="text/ng-template" id="title-bar">
 	<header class="title-bar title-bar-fixed">
 		<div class="button button-close"><span class="icon icon-x"></span></div>
-		<h1 class="title-bar-title">Nearby</h1>
-		<div class="button button-radius button-ghost button-filter" ng-click="showFilters()">Filter <span class="icon icon-settings"></span></div>
+		<h1 class="title-bar-title">{{getTitle()}}</h1>
+		<div class="button button-radius button-ghost button-filter" ng-class="{'is-disabled': disableFilterButton()}" ng-click="showFilters()">Filter <span class="icon icon-settings"></span></div>
 	</header>
 </script>
 <script type="text/ng-template" id="leaderboard-item">
@@ -61,8 +61,8 @@
 	</div>
 </script>
 <script type="text/ng-template" id="city-list">
-	<div class="city-select is-up" ng-show="citiesAreVisible()">
-		<div class="city-select-toggle">Select City</div>
+	<div class="city-select" ng-class="{'is-up': citiesAreUp()}" ng-show="citiesAreVisible()">
+		<div class="city-select-toggle" ng-click="toggleCityList()">Select City</div>
 		<h2 class="city-select-header">Select a city to view its leaderboard</h2>
 		<div class="city-list-scroll-wrap">
 			<ul class="city-list">
