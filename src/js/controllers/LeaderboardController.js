@@ -6,7 +6,7 @@ module.exports = function($scope, $rootScope, DataService){
 	$scope.activeGender = 'F';
 	$scope.activeFilters = {};
 	$scope.activeCity = '';
-	var loading = true;
+	$scope.loading = true;
 
 	//set up init data service
 	DataService.setActiveType($scope.activeType);
@@ -18,17 +18,22 @@ module.exports = function($scope, $rootScope, DataService){
 
 	function getData(){
 		//set loading
-		loading = true;
+		$scope.loading = true;
 		//get data
 		DataService.fetchData().success(function(data){
 			$scope.users = data.data.rankings;
-			loading = false;
+			$scope.loading = false;
 		});
 		
 	}
 
-	$scope.isLoading = function(){
-		return loading;
+	$scope.noResults = function(){
+		if ($scope.users && $scope.users.length){
+			return false;
+		} else if (!$scope.loading){
+			return true;
+		}
+		
 	}
 
 	//fetch initial data

@@ -17,9 +17,13 @@
 <script type="text/ng-template" id="leaderboard-view">	
 	<title-bar show-filters="showFilters()" cities-are-up="citiesAreUp()" active-type="activeType" active-city="activeCity"></title-bar>
 	<div class="scroll-wrap">
-		<ul class="leaderboard" ng-class="{'is-loading': isLoading()}">
+		<ul class="leaderboard" ng-class="{'is-loading': loading}">
 			<leaderboard-item ng-repeat="user in users"></leaderboard-item>
 		</ul>
+		<div class="no-results" ng-show="noResults()">
+			<h1 class="no-results-header">No Results!</h1>
+			<p class="no-results-copy">Try Changing your filter settings, or select a different leaderboard</p>
+		</div>
 	</div>
 	<tab-bar active-type="activeType" active-gender="activeGender"></tab-bar>
 	<filter-view filters-are-visible="filtersAreVisible" hide-filters="hideFilters()" active-type="activeType" active-filters="activeFilters"></filter-view>
