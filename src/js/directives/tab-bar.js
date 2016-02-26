@@ -6,7 +6,8 @@ module.exports = function(TabService, DataService) {
 		restrict: "E",
 		scope: {
 			activeType: "=",
-			activeGender: "="
+			activeGender: "=",
+			goNativeUrl: '&'
 		},
 		templateUrl: 'tab-bar',
 		controller: function ($scope){

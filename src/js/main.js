@@ -1,6 +1,7 @@
 'use strict';
 
 require('angular');
+var attachFastClick = require('fastclick');
 
 angular.module('TheGrade.Leaderboard', [require('angular-route')]).config(function($routeProvider) {
 	$routeProvider
@@ -11,6 +12,10 @@ angular.module('TheGrade.Leaderboard', [require('angular-route')]).config(functi
 	.otherwise({
 		redirectTo: '/'
 	});
+});
+
+angular.module('TheGrade.Leaderboard').run(function(){
+	attachFastClick(document.body);
 });
 
 require('./services');

@@ -1,6 +1,29 @@
 'use strict';
 
 module.exports = function($scope, $rootScope, DataService){
+	//detect mobile operating system
+	function getMobileOperatingSystem() {
+	  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+	  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) )
+	  {
+	    return 'iOS';
+
+	  }
+	  else if( userAgent.match( /Android/i ) )
+	  {
+
+	    return 'Android';
+	  }
+	  else
+	  {
+	    return 'unknown';
+	  }
+	}
+
+	$scope.mobileOS = getMobileOperatingSystem();
+	console.log($scope.mobileOS);
+
 	//Set initial states
 	$scope.activeType = 'nearby';
 	$scope.activeGender = 'F';
@@ -34,6 +57,27 @@ module.exports = function($scope, $rootScope, DataService){
 			return true;
 		}
 		
+	}
+
+	$scope.goNativeUrl = function(location, data){
+		if ($scope.mobileOS === 'iOS'){
+			var baseUrl = 'thegrade://'
+			var url = baseUrl + location;
+			if (data !== undefined) {
+				url += '/' + data;
+			}
+			
+			window.location.href = url;
+			console.log('iOS fired');
+
+		} else if ($scope.mobileOS === 'Android'){
+			if(data !== undefined){
+				Titanium.App.fireEvent("web2app", { text: location , id: data});
+			} else {
+				Titanium.App.fireEvent("web2app", { text: location });
+			}
+			console.log('Android Fired');
+		}
 	}
 
 	//fetch initial data

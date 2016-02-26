@@ -9,7 +9,8 @@ module.exports = function() {
 			showFilters: '&',
 			citiesAreUp: '&',
 			activeType: '=',
-			activeCity: '='
+			activeCity: '=',
+			goNativeUrl: '&'
 		},
 		controller: function($scope){
 
@@ -18,6 +19,10 @@ module.exports = function() {
 					return true;
 				}
 				return false;
+			}
+
+			$scope.close = function(){
+				$scope.goNativeUrl({location: 'close'});
 			}
 
 			var titleBarTitle = '';

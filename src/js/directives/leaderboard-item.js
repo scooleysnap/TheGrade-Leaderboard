@@ -5,14 +5,14 @@ module.exports = function() {
 		replace: true,
 		restrict: "E",
 		scope: {
-			user: '='
+			user: '=',
+			goNativeUrl: '&'
 		},
 		templateUrl: 'leaderboard-item',
-		link: function (scope, elem, attrs, tabBarCtrl){
+		link: function (scope, elem, attrs){
 			
 			scope.goToProfile = function(){
-				var baseUrl = 'thegrade://profile/';
-				window.location.href = baseUrl + scope.user.fbid;
+				scope.goNativeUrl({location: 'profile', data: scope.user.fbid});
 			}
 
 		}

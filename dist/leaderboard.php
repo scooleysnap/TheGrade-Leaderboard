@@ -209,7 +209,7 @@
 			{{activeFilters}}
 			<div class="filters-view-buttons">
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-ghost button-cancel" ng-click="cancelFilters()">{{numActiveFilters > 0 ? "Clear" : "Cancel"}}</div>
+					<div class="button button-radius button-ghost button-cancel" ng-click="cancelFilters()">Cancel</div>
 				</div>
 				<div class="filters-view-button-wrap">
 					<div class="button button-radius button-fill button-apply" ng-click="pushActiveFilters()">Apply</div>
