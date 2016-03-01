@@ -1,13 +1,13 @@
 'use strict';
 
-module.exports = function(DataService) {
+module.exports = function(TabService, DataService) {
 	return {
 		replace: true,
 		restrict: "E",
 		scope: {
 			activeType: "=",
 			activeGender: "=",
-			citiesAreUp: '='
+			goNativeUrl: '&'
 		},
 		templateUrl: 'tab-bar',
 		controller: function ($scope){
@@ -15,10 +15,6 @@ module.exports = function(DataService) {
 			this.setActiveType = function (type){
 				$scope.activeType = type;
 				DataService.setActiveType(type);
-
-				if(type === 'location'){
-					$scope.citiesAreUp = true;
-				}
 			};
 
 			this.getActiveType = function() {
@@ -35,6 +31,9 @@ module.exports = function(DataService) {
 			};
 		},
 		link: function (scope, elem, attrs){
+
+			scope.types = TabService.getTypes();
+			scope.genders = TabService.getGenders();
 
 
 		}

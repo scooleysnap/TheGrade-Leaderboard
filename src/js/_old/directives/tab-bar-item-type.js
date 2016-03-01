@@ -5,23 +5,18 @@ module.exports = function() {
 		replace: true,
 		restrict: "E",
 		scope: {
-			type: '@',
-			label: '@',
-			icon: '@'
+			type: '='
 		},
 		templateUrl: 'tab-bar-item-type',
 		require: '^tabBar',
 		link: function (scope, elem, attrs, tabBarCtrl){
 			
 			scope.makeActiveType = function() {
-				if (!scope.isActiveType()){
-					tabBarCtrl.setActiveType(scope.type);	
-				}
-				
+				tabBarCtrl.setActiveType(scope.type.type);
 			};
 
 			scope.isActiveType = function() {
-				return tabBarCtrl.getActiveType() === scope.type;
+				return tabBarCtrl.getActiveType() === scope.type.type;
 			};
 
 		}

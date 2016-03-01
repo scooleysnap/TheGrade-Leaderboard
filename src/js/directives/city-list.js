@@ -2,22 +2,11 @@
 
 module.exports = function(DataService) {
 	return {
-		replace: true,
-		restrict: "E",
-		scope: {
-			activeType: "=",
-			activeCity: "=",
-			citiesAreUp: '&'
-		},
 		templateUrl: 'city-list',
-		controller: function ($scope){
-			$scope.setActiveCity = function(city){
-				$scope.activeCity = city;
-				DataService.setActiveCity(city);
-				$scope.toggleCityList();
-			};
-
-
+		restrict: 'E',
+		replace: true,
+		controller: function($scope){
+			
 			$scope.citiesAreVisible = function(){
 				if ($scope.activeType === 'location'){
 					return true;
@@ -25,38 +14,37 @@ module.exports = function(DataService) {
 				return false;
 			};
 
-			var isUp = true;
+			$scope.citiesAreUp = true;
 
-			$scope.citiesAreUp = function(){
-				if ($scope.activeCity === ''){
-					return true;
-				} else {
-					if (isUp === true){
-						return true;
-					} else {
-						return false;
-					}
-				}
+			$scope.showCityList = function(){
+				$scope.citiesAreUp = true;
+			}
+
+			$scope.hideCityList = function(){
+				$scope.citiesAreUp = false;
 			}
 
 			$scope.toggleCityList = function(){
-				if($scope.activeCity === ''){
-					isUp = true;
-				} else {
-					if(isUp === true){
-						isUp = false;
+				if ($scope.activeCity){
+					if ($scope.citiesAreUp === true){
+						$scope.hideCityList();
 					} else {
-						isUp = true;
+						$scope.showCityList();
 					}
 				}
 			};
+
+
 		},
-		link: function (scope, elem, attrs){
+		link: function(scope, elem, attrs){
+			scope.setActiveCity = function(city){
+				if (scope.activeCity !== city){
+					scope.activeCity = city;
+					DataService.setActiveCity(city);
 
-			scope.cities = ['Chicago', 'New York', 'Los Angeles'];
-
-
-
+					scope.hideCityList();
+				}
+			};
 		}
-	};
-};
+	}
+}

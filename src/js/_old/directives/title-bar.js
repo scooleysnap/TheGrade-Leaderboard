@@ -5,17 +5,35 @@ module.exports = function() {
 		templateUrl: 'title-bar',
 		restrict: 'E',
 		replace: true,
+		scope: {
+			showFilters: '&',
+			citiesAreUp: '&',
+			activeType: '=',
+			activeCity: '=',
+			goNativeUrl: '&'
+		},
 		controller: function($scope){
+
+			$scope.disableFilterButton = function(){
+				if ($scope.citiesAreUp() === true){
+					return true;
+				}
+				return false;
+			}
+
+			$scope.close = function(){
+				$scope.goNativeUrl({location: 'close'});
+			}
 
 			var titleBarTitle = '';
 
 			$scope.getTitle = function(){
 				if($scope.activeType === 'location'){
-					if(!$scope.activeCity){
+					if($scope.activeCity === ''){
 						titleBarTitle = 'Location';
 						return titleBarTitle;
 					} else {
-						titleBarTitle = $scope.activeCity.replace(/(?: |\b)(\w)/g, function(key) { return key.toUpperCase()});
+						titleBarTitle = $scope.activeCity.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function(key) { return key.toUpperCase()});
 						return titleBarTitle;
 					}
 				} else {

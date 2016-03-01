@@ -5,22 +5,18 @@ module.exports = function() {
 		replace: true,
 		restrict: "E",
 		scope: {
-			gender: '@',
-			label: '@',
-			icon: '@'
+			gender: '='
 		},
 		templateUrl: 'tab-bar-item-gender',
 		require: '^tabBar',
 		link: function (scope, elem, attrs, tabBarCtrl){
 			
 			scope.makeActiveGender = function() {
-				if(!scope.isActiveGender()){
-					tabBarCtrl.setActiveGender(scope.gender);
-				}
+				tabBarCtrl.setActiveGender(scope.gender.gender);
 			};
 
 			scope.isActiveGender = function() {
-				return tabBarCtrl.getActiveGender() === scope.gender;
+				return tabBarCtrl.getActiveGender() === scope.gender.gender;
 			};
 
 		}

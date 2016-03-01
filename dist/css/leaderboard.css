@@ -56,7 +56,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   /* Icon Defs ===========*/
 }
-.icon-nearby:before {
+.icon-location:before {
   content: "\e901";
 }
 .icon-female:before {
@@ -65,7 +65,7 @@ body {
 .icon-male:before {
   content: "\e902";
 }
-.icon-location:before {
+.icon-nearby:before {
   content: "\e606";
 }
 .icon-settings:before {
