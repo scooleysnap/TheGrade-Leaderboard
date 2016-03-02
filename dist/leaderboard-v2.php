@@ -94,14 +94,14 @@
 		<header class="title-bar">
 			<h1 class="title-bar-title">Filters</h1>
 		</header>
-		<h1 class="filters-view-header">Tap a filter to select.</h1>
+		<h1 class="filters-view-header">Tap a filter to select. Uncheck to deselect</h1>
 		<form action="" name="filtersForm">
 			<div class="filter filter--distance" ng-hide="hideDistanceFilter()" ng-class="{'is-active': isActiveFilter('radius_mi')}">
 				<div class="filter-label" ng-click="activateFilter('radius_mi')">Distance: {{filters.radius_mi.value}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control" >
 						<div class="filter-select">
-							<select name="radius_mi" ng-focus="activateFilter('radius_mi')" id="radius_mi" ng-model="filters.radius_mi">
+							<select name="radius_mi" ng-focus="activateFilter('radius_mi')" id="radius_mi" ng-model="filters.radius_mi.value">
 								<option value="2">2 Miles</option>
 								<option value="5">5 Miles</option>
 								<option value="10">10 Miles</option>
@@ -120,14 +120,14 @@
 				</div>
 			</div>
 			<div class="filter filter--age" ng-class="{'is-active': isActiveFilter('age_min') && isActiveFilter('age_max')}">
-				<div class="filter-label" ng-click="activateFilter('age_min'); activeFilter('age_max')">Age: Min. Age: {{filters.age_min}}/ Max Age: {{filters.age_max}}</div>
+				<div class="filter-label" ng-click="activateFilter('age_min'); activeFilter('age_max')">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-input filter-input-min">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min.value">
 						</div>
 						<div class="filter-input filter-input-max">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
 						</div>
 					</div>
 					<div class="filter-toggle-wrap">
@@ -140,7 +140,7 @@
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-select">
-							<select name="occupation" ng-model="filters.occupation" ng-focus="activateFilter('occupation')" id="occupation">
+							<select name="occupation" ng-model="filters.occupation.value" ng-focus="activateFilter('occupation')" id="occupation">
 								<optgroup label="Select an occupation">
 									<option value="All">All</option>
 									<option value="">2 Miles</option>
@@ -166,7 +166,7 @@
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-select">
-							<select name="religion" ng-focus="activateFilter('religion')" ng-model="filters.religion" id="religion">
+							<select name="religion" ng-focus="activateFilter('religion')" ng-model="filters.religion.value" id="religion">
 								<optgroup label="Select a religion">
 									<option value="All">All</option>
 									<option value="agnostic">Agnostic</option>
@@ -190,8 +190,6 @@
 					</div>
 				</div>
 			</div>
-			{{_activeFilters}}
-			{{filters}}
 			<div class="filters-view-buttons">
 				<div class="filters-view-button-wrap">
 					<div class="button button-radius button-ghost button-cancel" ng-click="hideFilters()">Cancel</div>
