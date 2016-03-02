@@ -96,12 +96,12 @@
 		</header>
 		<h1 class="filters-view-header">Tap a filter to select.</h1>
 		<form action="" name="filtersForm">
-			<div class="filter filter--distance" ng-hide="hideDistance()" ng-class="{'is-active': isActive('radius_mi')}">
-				<div class="filter-label">Distance: {{filters.radius_mi.value}}</div>
+			<div class="filter filter--distance" ng-hide="hideDistanceFilter()" ng-class="{'is-active': isActiveFilter('radius_mi')}">
+				<div class="filter-label" ng-click="activateFilter('radius_mi')">Distance: {{filters.radius_mi.value}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control" >
 						<div class="filter-select">
-							<select name="radius_mi" ng-focus="activateFilter('radius_mi')" id="radius_mi" ng-model="filters.radius_mi.value">
+							<select name="radius_mi" ng-focus="activateFilter('radius_mi')" id="radius_mi" ng-model="filters.radius_mi">
 								<option value="2">2 Miles</option>
 								<option value="5">5 Miles</option>
 								<option value="10">10 Miles</option>
@@ -119,15 +119,15 @@
 					</div>
 				</div>
 			</div>
-			<div class="filter filter--age" ng-class="{'is-active': isActive('age_min') && isActive('age_max')}">
-				<div class="filter-label">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
+			<div class="filter filter--age" ng-class="{'is-active': isActiveFilter('age_min') && isActiveFilter('age_max')}">
+				<div class="filter-label" ng-click="activateFilter('age_min'); activeFilter('age_max')">Age: Min. Age: {{filters.age_min}}/ Max Age: {{filters.age_max}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-input filter-input-min">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min.value">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min">
 						</div>
 						<div class="filter-input filter-input-max">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
+							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max">
 						</div>
 					</div>
 					<div class="filter-toggle-wrap">
@@ -135,22 +135,24 @@
 					</div>
 				</div>
 			</div>
-			<div class="filter filter--occupation" ng-class="{'is-active': isActive('occupation')}">
-				<div class="filter-label">Occupation</div>
+			<div class="filter filter--occupation" ng-class="{'is-active': isActiveFilter('occupation')}">
+				<div class="filter-label" ng-click="activateFilter('occupation')">Occupation</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-select">
-							<select name="occupation" ng-model="filters.occupation.value" ng-focus="activateFilter('occupation')" id="occupation">
-								<option value="">Select an occupation</option>
-								<option value="2">2 Miles</option>
-								<option value="5">5 Miles</option>
-								<option value="10">10 Miles</option>
-								<option value="20">20 Miles</option>
-								<option value="40">40 Miles</option>
-								<option value="80">80 Miles</option>
-								<option value="200">200 Miles</option>
-								<option value="500">500 Miles</option>
-								<option value="1000">1000 Miles</option>
+							<select name="occupation" ng-model="filters.occupation" ng-focus="activateFilter('occupation')" id="occupation">
+								<optgroup label="Select an occupation">
+									<option value="All">All</option>
+									<option value="">2 Miles</option>
+									<option value="5">5 Miles</option>
+									<option value="10">10 Miles</option>
+									<option value="20">20 Miles</option>
+									<option value="40">40 Miles</option>
+									<option value="80">80 Miles</option>
+									<option value="200">200 Miles</option>
+									<option value="500">500 Miles</option>
+									<option value="1000">1000 Miles</option>
+								</optgroup>
 							</select>
 						</div>
 					</div>
@@ -159,25 +161,27 @@
 					</div>
 				</div>
 			</div>
-			<div class="filter filter--religion" ng-class="{'is-active': isActive('religion')}">
-				<div class="filter-label">Religion</div>
+			<div class="filter filter--religion" ng-class="{'is-active': isActiveFilter('religion')}">
+				<div class="filter-label" ng-click="activateFilter('religion')">Religion</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
 						<div class="filter-select">
-							<select name="religion" ng-focus="activateFilter('religion')" ng-model="filters.religion.value" id="religion">
-								<option value="">Select a religion</option>
-								<option value="agnostic">Agnostic</option>
-								<option value="atheist">Atheist</option>
-								<option value="buddhist">Buddhist</option>
-								<option value="christian_catholic">Christian Catholic</option>
-								<option value="christian_mormon">Christian Mormon</option>
-								<option value="christian_protestant">Christian Protestant</option>
-								<option value="christian_other">Christian Other</option>
-								<option value="hindu">Hindu</option>
-								<option value="jewish">Jewish</option>
-								<option value="muslim">Muslim</option>
-								<option value="spiritual">Spiritual</option>
-								<option value="other">Other</option>
+							<select name="religion" ng-focus="activateFilter('religion')" ng-model="filters.religion" id="religion">
+								<optgroup label="Select a religion">
+									<option value="All">All</option>
+									<option value="agnostic">Agnostic</option>
+									<option value="atheist">Atheist</option>
+									<option value="buddhist">Buddhist</option>
+									<option value="christian_catholic">Christian Catholic</option>
+									<option value="christian_mormon">Christian Mormon</option>
+									<option value="christian_protestant">Christian Protestant</option>
+									<option value="christian_other">Christian Other</option>
+									<option value="hindu">Hindu</option>
+									<option value="jewish">Jewish</option>
+									<option value="muslim">Muslim</option>
+									<option value="spiritual">Spiritual</option>
+									<option value="other">Other</option>
+								</optgroup>
 							</select>
 						</div>
 					</div>
@@ -186,13 +190,14 @@
 					</div>
 				</div>
 			</div>
-			{{activeFilters}}
+			{{_activeFilters}}
+			{{filters}}
 			<div class="filters-view-buttons">
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-ghost button-cancel" ng-click="cancelFilters()">Cancel</div>
+					<div class="button button-radius button-ghost button-cancel" ng-click="hideFilters()">Cancel</div>
 				</div>
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-fill button-apply" ng-click="pushActiveFilters()">Apply</div>
+					<div class="button button-radius button-fill button-apply" ng-click="applyFilters()">Apply</div>
 				</div>
 			</div>
 		</form>

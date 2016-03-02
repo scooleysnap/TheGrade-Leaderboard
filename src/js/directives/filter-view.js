@@ -7,6 +7,7 @@ module.exports = function(DataService) {
 		replace: true,
 		controller: function($scope){
 			$scope.filtersAreVisible = false;
+			$scope._activeFilters = {};
 
 			$scope.showFilters = function(){
 				if(!$scope.filtersAreVisible){
@@ -22,36 +23,50 @@ module.exports = function(DataService) {
 
 			};
 
-			$scope.filters = {
-				'range_mi' : {
-					'value' : '2',
-					'isActive' : false
-				},
-				'age_min' : {
-					'value' : 18,
-					'isActive' : false
-				},
-				'age_max' : {
-					'value' : 25,
-					'isActive' : false
-				},
-				'occupation' : {
-					'value' : '',
-					'isActive' : false
-				},
-				'religion' : {
-					'value' : '',
-					'isActive' : false
+			$scope.hideDistanceFilter = function(){
+				if($scope.activeType === 'location'){
+
+					return true;
 				}
+				return false;
 			};
 
 			$scope.isActiveFilter = function(filter){
-				scope.filters[filter].isActive = true;
+				if($scope._activeFilters[filter]){
+					return true;
+				}
+				return false;
 			};
+
+			$scope.activateFilter = function(filter){
+				if(!$scope._activeFilters[filter]){
+					$scope._activeFilters[filter] = $scope.filters[filter];
+				}
+			};
+
+			$scope.toggleFilter = function(filter){
+				if(typeof $scope._activeFilters[filter] !== 'undefined'){
+					delete $scope._activeFilters[filter];
+				} else {
+					$scope._activeFilters[filter] = $scope.filters[filter];
+				}
+			}
+
+			
+
+			$scope.applyFilters = function(){
+				DataService.setActiveFilters($scope._activeFilters);
+			}
 
 		},
 		link: function(scope, elem, attrs){
-
+			scope.filters = {
+				'radius_mi' : '2',
+				'age_min' : 18,
+				'age_max' : 25,
+				'occupation' : 'All',
+				'religion' : 'All'
+			};
 		}
 	}
 }
