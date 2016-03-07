@@ -149,6 +149,9 @@ body {
   width: 100%;
   line-height: 35px;
 }
+.button-clear {
+  line-height: 28px;
+}
 .title-bar {
   height: 44px;
   background-color: #000;
@@ -576,6 +579,9 @@ Layout/Appearance
   width: 50%;
   padding: 0 8px;
 }
+.filters-view-clear-button-wrap {
+  padding: 0 8px;
+}
 .filters-view.is-visible {
   -webkit-transform: translate3d(0, 0, 0);
   trasnform: translate3d(0, 0, 0);
@@ -676,37 +682,23 @@ Layout/Appearance
 .filter--age .filter-wrap {
   padding-left: 0;
 }
-.filter--age .filter-input {
+.filter--age .filter-select {
   position: relative;
   float: left;
   width: 50%;
   height: 100%;
-}
-.filter--age .filter-input input {
-  position: absolute;
-  top: 0;
-  color: inherit;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  -webkit-appearance: none;
-  appearance: none;
-  background-color: transparent;
-  border: none;
-  font-size: 17px;
-  font-weight: 400;
-  padding: 0;
-  margin: 0;
-  width: 100%;
   text-align: center;
   border-right: 1px solid #323536;
+  box-sizing: border-box;
 }
-.filter--age .filter-input input:focus {
-  outline: none;
+.filter--age .filter-select select {
+  opacity: 0.0001;
 }
-.filter--age .filter-input-min:before,
-.filter--age .filter-input-max:before {
+.filter--age .filter-select-value {
+  text-align: center;
+}
+.filter--age .filter-select-min:before,
+.filter--age .filter-select-max:before {
   font-size: 11px;
   font-weight: 400;
   position: absolute;
@@ -715,14 +707,11 @@ Layout/Appearance
   z-index: 1;
   line-height: 1;
 }
-.filter--age .filter-input-min:before {
+.filter--age .filter-select-min:before {
   content: 'From:';
 }
-.filter--age .filter-input-max:before {
+.filter--age .filter-select-max:before {
   content: 'To:';
-}
-.filter--age [class="filter-input"]:last-of-type {
-  border: none;
 }
 .filter.is-active {
   color: #fff;

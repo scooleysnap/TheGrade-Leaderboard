@@ -32300,123 +32300,67 @@ module.exports = angular;
 'use strict';
 
 module.exports = function($scope, $rootScope, DataService){
-	//detect mobile operating system
-	function getMobileOperatingSystem() {
-	  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+	//Inits for view
+	$scope.activeType = "nearby";
+	$scope.activeGender = "F";
 
-	  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) )
-	  {
-	    return 'iOS';
-
-	  }
-	  else if( userAgent.match( /Android/i ) )
-	  {
-
-	    return 'Android';
-	  }
-	  else
-	  {
-	    return 'unknown';
-	  }
-	}
-
-	$scope.mobileOS = getMobileOperatingSystem();
-	console.log($scope.mobileOS);
-
-	//Set initial states
-	$scope.activeType = 'nearby';
-	$scope.activeGender = 'F';
-	$scope.activeFilters = {};
-	$scope.activeCity = '';
-	$scope.loading = true;
-
-	//set up init data service
+	//Inits for DataService
 	DataService.setActiveType($scope.activeType);
 	DataService.setActiveGender($scope.activeGender);
-	DataService.setActiveCity($scope.activeCity);
-	DataService.setActiveFilters($scope.activeFilters);
 
-	console.log(DataService.requestUrl());
+	console.log(DataService.getUrl());
 
-	function getData(){
-		//set loading
-		$scope.loading = true;
-		//get data
-		DataService.fetchData().success(function(data){
-			$scope.users = data.data.rankings;
-			$scope.loading = false;
-		});
-		
-	}
+
+	$scope.isLoading = true;
 
 	$scope.noResults = function(){
 		if ($scope.users && $scope.users.length){
 			return false;
-		} else if (!$scope.loading){
+		} else if (!$scope.isLoading){
 			return true;
 		}
 		
+	};
+
+	function getData(){
+		//set loading
+		$scope.isLoading = true;
+		//get data
+		DataService.fetchData().success(function(data){
+			$scope.users = data.data.rankings;
+			$scope.isLoading = false;
+		});
+		
 	}
 
-	$scope.goNativeUrl = function(location, data){
-		if ($scope.mobileOS === 'iOS'){
-			var baseUrl = 'thegrade://'
-			var url = baseUrl + location;
-			if (data !== undefined) {
-				url += '/' + data;
-			}
-			
-			window.location.href = url;
-			console.log('iOS fired');
-
-		} else if ($scope.mobileOS === 'Android'){
-			if(data !== undefined){
-				Titanium.App.fireEvent("web2app", { text: location , id: data});
-			} else {
-				Titanium.App.fireEvent("web2app", { text: location });
-			}
-			console.log('Android Fired');
-		}
-	}
-
-	//fetch initial data
+	//Get Initial Data
 	getData();
 
+	$rootScope.$on('tabBar::activeTypeUpdated', function(event, data){
+		console.log('Active Type Updated: ' + data);
+		console.log(DataService.getUrl());
+		getData();
 
+	});
 
-
-
-	// hide filters by default
-	$scope.filtersAreVisible = false;
-
-	$scope.showFilters = function(){
-		$scope.filtersAreVisible = true;
-	}
-
-	$scope.hideFilters = function(){
-		$scope.filtersAreVisible = false;
-	}
-
-	//event handling for data
-	$rootScope.$on("tabBar::activeTypeUpdated", function(event, data){
-		console.log(DataService.requestUrl());
+	$rootScope.$on('tabBar::activeGenderUpdated', function(event, data){
+		console.log('Active Gender Updated: ' + data);
+		console.log(DataService.getUrl());
 		getData();
 	});
 
-	$rootScope.$on("tabBar::activeGenderUpdated", function(event, data){
-		console.log(DataService.requestUrl());
+	$rootScope.$on('cityList::activeCityUpdated', function(event, data){
+		console.log('Active City Updated: ' + data);
+		console.log(DataService.getUrl());
 		getData();
 	});
 
-	$rootScope.$on("cityList::activeCityUpdated", function(event, data){
-		console.log(DataService.requestUrl());
+	$rootScope.$on('filterView::activeFiltersUpdated', function(event, data){
+		console.log('Active Filters Updated: ' + data);
+		console.log(DataService.getUrl());
 		getData();
 	});
 
-	$rootScope.$on("filters::activeFiltersUpdated", function(event, data){
-		console.log(DataService.requestUrl());
-		getData();
-	});
 };
 },{}],7:[function(require,module,exports){
 'use strict';
@@ -32430,22 +32374,11 @@ angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$sc
 
 module.exports = function(DataService) {
 	return {
-		replace: true,
-		restrict: "E",
-		scope: {
-			activeType: "=",
-			activeCity: "=",
-			citiesAreUp: '&'
-		},
 		templateUrl: 'city-list',
-		controller: function ($scope){
-			$scope.setActiveCity = function(city){
-				$scope.activeCity = city;
-				DataService.setActiveCity(city);
-				$scope.toggleCityList();
-			};
-
-
+		restrict: 'E',
+		replace: true,
+		controller: function($scope){
+			
 			$scope.citiesAreVisible = function(){
 				if ($scope.activeType === 'location'){
 					return true;
@@ -32453,199 +32386,222 @@ module.exports = function(DataService) {
 				return false;
 			};
 
-			var isUp = true;
+			$scope.citiesAreUp = true;
 
-			$scope.citiesAreUp = function(){
-				if ($scope.activeCity === ''){
-					return true;
-				} else {
-					if (isUp === true){
-						return true;
-					} else {
-						return false;
-					}
-				}
+			$scope.showCityList = function(){
+				$scope.citiesAreUp = true;
+			}
+
+			$scope.hideCityList = function(){
+				$scope.citiesAreUp = false;
 			}
 
 			$scope.toggleCityList = function(){
-				if($scope.activeCity === ''){
-					isUp = true;
-				} else {
-					if(isUp === true){
-						isUp = false;
+				if ($scope.activeCity){
+					if ($scope.citiesAreUp === true){
+						$scope.hideCityList();
 					} else {
-						isUp = true;
+						$scope.showCityList();
 					}
 				}
 			};
+
+
 		},
-		link: function (scope, elem, attrs){
+		link: function(scope, elem, attrs){
+			scope.setActiveCity = function(city){
+				if (scope.activeCity !== city){
+					scope.activeCity = city;
+					DataService.setActiveCity(city);
 
-			scope.cities = ['Chicago', 'New York', 'Los Angeles'];
-
-
-
+					scope.hideCityList();
+				}
+			};
 		}
-	};
-};
-
+	}
+}
 },{}],9:[function(require,module,exports){
 'use strict';
 
-module.exports = function(FilterService, DataService) {
+module.exports = function(DataService) {
 	return {
-		replace: true,
-		restirct: "E",
-		scope: {
-			filtersAreVisible: '=',
-			activeType: '=',
-			hideFilters: '&',
-			activeFilters: '='
-		},
 		templateUrl: 'filter-view',
-		controller: function ($scope){
+		restrict: 'E',
+		replace: true,
+		controller: function($scope){
+			$scope.filtersAreVisible = false;
+			var _activeFilters = {};
 
-		},
-		link: function (scope, elem, attrs){
-			scope.numActiveFilters = 0;
-			scope.errorFilters = [];
-			scope.filters = {
-				'radius_mi': {
-					'value': '2',
-					'isActive': false
-				},
-				'age_min': {
-					'value': 18,
-					'isActive': false
-				},
-				'age_max': {
-					'value': 25,
-					'isActive': false
-				},
-				'occupation': {
-					'value': '',
-					'isActive': false
-				},
-				'religion': {
-					'value': '',
-					'isActive': false
+			$scope.showFilters = function(){
+				if(!$scope.filtersAreVisible){
+					$scope.filtersAreVisible = true;
 				}
+
 			};
 
-			scope.isActive = function(filter){
-				return scope.filters[filter].isActive;
+			$scope.hideFilters = function(){
+				if($scope.filtersAreVisible){
+					$scope.filtersAreVisible = false;
+				}
+
 			};
 
-			scope.hideDistance = function(){
-				if (scope.activeType === 'location'){
-					scope.filters.radius_mi.isActive = false;
-					
-					if (scope.activeFilters['radius_mi']) {
-						delete scope.activeFilters['radius_mi'];
-						scope.numActiveFilters --;
-					}
-					
+			$scope.clearFilters = function(){
+				//clear active filters
+				$scope._activeFilters = {};
+				//reset all filters
+				for(var key in $scope.filters){
+					$scope.filters[key].isActive = false;
+				}
+			}
+
+			$scope.hideDistanceFilter = function(){
+				if($scope.activeType === 'location'){
+
 					return true;
 				}
 				return false;
-			}
+			};
 
-			scope.activateFilter = function(filter){
-				if (!scope.isActive(filter)){
-					scope.filters[filter].isActive = true;
-					scope.numActiveFilters++;
+			$scope.isActiveFilter = function(filter){
+				if($scope.filters[filter].isActive){
+					return true;
+				}
+				return false;
+			};
+
+			$scope.activateFilter = function(filter){
+				if(!$scope.filters[filter].isActive){
+					$scope.filters[filter].isActive = true;
 				}
 			};
 
-			scope.toggleFilter = function(filter){
-				if (scope.isActive(filter)){
-					scope.filters[filter].isActive = false;
-					scope.numActiveFilters--;
+			$scope.toggleFilter = function(filter){
+				if($scope.filters[filter].isActive){
+					$scope.filters[filter].isActive = false;
+				} else {
+					$scope.filters[filter].isActive = true;
+				}
+			};
+
+			$scope.checkFilterAgeMin = function(){
+				if ($scope.filters.age_min.value > $scope.filters.age_max.value){
+					$scope.filters.age_min.value = $scope.filters.age_max.value;
+				}
+			};
+
+			$scope.checkFilterAgeMax = function(){
+				if($scope.filters.age_max.value < $scope.filters.age_min.value){
+					if($scope.filters.age_min.value == 50){
+						$scope.filters.age_max.value = 100;
+					} else {
+						$scope.filters.age_max.value = $scope.filters.age_min.value;
+					}
+				}
+			};
+
+			$scope.cancelButtonFilters = function(){
+				for(var key in $scope.filters){
+					if($scope.filters[key].isActive && !_activeFilters[key]){
+						//remove un-applied filters
+						$scope.filters[key].isActive = false;
+					} else if (!$scope.filters[key].isActive && _activeFilters[key]){
+						//re-apply active filters
+						$scope.filters[key].isActive = true;
+					}
+				}
+				$scope.hideFilters();
+			}
+			
+
+			$scope.applyFilters = function(){
+				//reset object
+				_activeFilters = {};
+
+				for (var key in $scope.filters){
+					//only if filter is active and is not set to 'All' (in the case of occupation and religion)
+					if ($scope.filters[key].isActive){
+						_activeFilters[key] = $scope.filters[key].value;
+					}
+				}
+
+				if(Object.keys(_activeFilters)){
+					console.log(_activeFilters);
+					DataService.setActiveFilters(_activeFilters);
+					$scope.hideFilters();
 				}else {
-					scope.filters[filter].isActive = true;
-					scope.numActiveFilters++;
+					$scope.hideFilters();
+					console.log(_activeFilters);
 				}
+
+				
 			};
+			//generate options for age_min filters;
+			$scope.ageRangeOptionsMin = {};
 
-			scope.cancelFilters = function(){
-				scope.hideFilters();
-			};
-
-			scope.validateFilters = function(){
-
+			for(var i = 18; i <= 50; i++){
+				if(i != 50){
+					$scope.ageRangeOptionsMin[i] = i;
+				} else {
+					$scope.ageRangeOptionsMin['50+'] = 50;
+				}
 			}
 
-			scope.pushActiveFilters = function(){
-				if (scope.numActiveFilters > 0){
-					
-					scope.activeFilters = {};
-					scope.errorFilters = [];
-					//make sure min age is less than max age
-					if(scope.filters.age_min.isActive && scope.filters.age_max.isActive){
-							
-							if (scope.filters.age_min.value >= scope.filters.age_max.value) {
-								scope.errorFilters.push('Max age is less than min age');	
-							}
-
-							if (scope.filtersForm.age_min.$error.min || scope.filtersForm.age_max.$error.min || scope.filtersForm.age_min.$error.max || scope.filtersForm.age_max.$error.max){
-								scope.errorFilters.push('Age must be between 18 and 100');	
-							}
-							
-					}
-
-
-					
-					for (var key in scope.filters){
-						
-						if (scope.filters[key].isActive === true){
-
-							// check for blank strings in options
-							if (scope.filters[key].value !== ''){
-						
-								scope.activeFilters[key] = scope.filters[key].value;
-
-							} else {
-
-								scope.errorFilters.push(key + ' - select value');
-
-							}
-
-							
-						} 
-					}
-
-					
+			//generate options for age_max filters
+			$scope.ageRangeOptionsMax = {};
+			
+			for(var i = 18; i <= 50; i++){
+				if(i != 50){
+					$scope.ageRangeOptionsMax[i] = i;
 				} else {
-					scope.activeFilters = {};
+					$scope.ageRangeOptionsMax['50+'] = 100;
 				}
+			}
 
-				if (scope.errorFilters.length > 0){
-					alert('Please fix or remove the following filters: \n' + scope.errorFilters.join('\n'));
-				} else {
+			
 
-					DataService.setActiveFilters(scope.activeFilters);
-					scope.hideFilters();	
+
+		},
+		link: function(scope, elem, attrs){
+			scope.filters = {
+				'radius_mi' : {
+					'value' : '2',
+					'isActive' : false
+				},
+				'age_min' : {
+					'value' : 18,
+					'isActive' : false
+				},
+				'age_max' : {
+					'value' : 25,
+					'isActive' : false
+				},
+				'religion' : {
+					'value' : 'All',
+					'isActive' : false
+				},
+				'occupation' : {
+					'value' : 'All',
+					'isActive' : false
 				}
 			};
-
 		}
-	};
-};
-
+	}
+}
 },{}],10:[function(require,module,exports){
 'use strict';
 
 require('angular');
 
-angular.module('TheGrade.Leaderboard').directive('titleBar', require('./title-bar'));
-angular.module('TheGrade.Leaderboard').directive('tabBar', ['TabService', 'DataService', require('./tab-bar')]);
-angular.module('TheGrade.Leaderboard').directive('leaderboardItem', require('./leaderboard-item'));
+angular.module('TheGrade.Leaderboard').directive('tabBar', ['DataService', require('./tab-bar')]);
 angular.module('TheGrade.Leaderboard').directive('tabBarItemType', require('./tab-bar-item-type'));
 angular.module('TheGrade.Leaderboard').directive('tabBarItemGender', require('./tab-bar-item-gender'));
-angular.module('TheGrade.Leaderboard').directive('filterView', ['FilterService', 'DataService', require('./filter-view')]);
+angular.module('TheGrade.Leaderboard').directive('titleBar', require('./title-bar'));
 angular.module('TheGrade.Leaderboard').directive('cityList', ['DataService', require('./city-list')]);
-angular.module('TheGrade.Leaderboard').directive('nativeUrl', require('./native-url'));
-},{"./city-list":8,"./filter-view":9,"./leaderboard-item":11,"./native-url":12,"./tab-bar":15,"./tab-bar-item-gender":13,"./tab-bar-item-type":14,"./title-bar":16,"angular":4}],11:[function(require,module,exports){
+angular.module('TheGrade.Leaderboard').directive('filterView', ['DataService', require('./filter-view')]);
+angular.module('TheGrade.Leaderboard').directive('leaderboardItem', require('./leaderboard-item'));
+angular.module('TheGrade.Leaderboard').directive('nativeLink', ['UserAgentService', require('./native-link')]);
+},{"./city-list":8,"./filter-view":9,"./leaderboard-item":11,"./native-link":12,"./tab-bar":15,"./tab-bar-item-gender":13,"./tab-bar-item-type":14,"./title-bar":16,"angular":4}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function() {
@@ -32669,14 +32625,43 @@ module.exports = function() {
 },{}],12:[function(require,module,exports){
 'use strict';
 
-module.exports = function() {
+module.exports = function(UserAgentService) {
 	return {
-		restrict: "A",
+		restrict: 'A',
 		controller: function($scope){
 
+			var _mobileOS = UserAgentService.getMobileOS();
+
+
+			$scope.goNativeUrl = function(location, data){
+				if (_mobileOS === 'iOS'){
+					var baseUrl = 'thegrade://'
+					var url = baseUrl + location;
+					if (data !== undefined) {
+						url += '/' + data;
+					}
+					
+					window.location.href = url;
+					console.log('iOS fired', url);
+
+				} else if (_mobileOS === 'Android'){
+					if(data !== undefined){
+						Titanium.App.fireEvent("web2app", { text: location , id: data});
+					} else {
+						Titanium.App.fireEvent("web2app", { text: location });
+					}
+					console.log('Android Fired');
+				}
+			};
+
+
+
+		},
+		link: function(scope, elem, attrs){
+
 		}
-	};
-};
+	}
+}
 },{}],13:[function(require,module,exports){
 'use strict';
 
@@ -32685,18 +32670,22 @@ module.exports = function() {
 		replace: true,
 		restrict: "E",
 		scope: {
-			gender: '='
+			gender: '@',
+			label: '@',
+			icon: '@'
 		},
 		templateUrl: 'tab-bar-item-gender',
 		require: '^tabBar',
 		link: function (scope, elem, attrs, tabBarCtrl){
 			
 			scope.makeActiveGender = function() {
-				tabBarCtrl.setActiveGender(scope.gender.gender);
+				if(!scope.isActiveGender()){
+					tabBarCtrl.setActiveGender(scope.gender);
+				}
 			};
 
 			scope.isActiveGender = function() {
-				return tabBarCtrl.getActiveGender() === scope.gender.gender;
+				return tabBarCtrl.getActiveGender() === scope.gender;
 			};
 
 		}
@@ -32710,18 +32699,23 @@ module.exports = function() {
 		replace: true,
 		restrict: "E",
 		scope: {
-			type: '='
+			type: '@',
+			label: '@',
+			icon: '@'
 		},
 		templateUrl: 'tab-bar-item-type',
 		require: '^tabBar',
 		link: function (scope, elem, attrs, tabBarCtrl){
 			
 			scope.makeActiveType = function() {
-				tabBarCtrl.setActiveType(scope.type.type);
+				if (!scope.isActiveType()){
+					tabBarCtrl.setActiveType(scope.type);	
+				}
+				
 			};
 
 			scope.isActiveType = function() {
-				return tabBarCtrl.getActiveType() === scope.type.type;
+				return tabBarCtrl.getActiveType() === scope.type;
 			};
 
 		}
@@ -32731,14 +32725,14 @@ module.exports = function() {
 },{}],15:[function(require,module,exports){
 'use strict';
 
-module.exports = function(TabService, DataService) {
+module.exports = function(DataService) {
 	return {
 		replace: true,
 		restrict: "E",
 		scope: {
 			activeType: "=",
 			activeGender: "=",
-			goNativeUrl: '&'
+			citiesAreUp: '='
 		},
 		templateUrl: 'tab-bar',
 		controller: function ($scope){
@@ -32746,6 +32740,10 @@ module.exports = function(TabService, DataService) {
 			this.setActiveType = function (type){
 				$scope.activeType = type;
 				DataService.setActiveType(type);
+
+				if(type === 'location'){
+					$scope.citiesAreUp = true;
+				}
 			};
 
 			this.getActiveType = function() {
@@ -32763,9 +32761,6 @@ module.exports = function(TabService, DataService) {
 		},
 		link: function (scope, elem, attrs){
 
-			scope.types = TabService.getTypes();
-			scope.genders = TabService.getGenders();
-
 
 		}
 	};
@@ -32779,35 +32774,17 @@ module.exports = function() {
 		templateUrl: 'title-bar',
 		restrict: 'E',
 		replace: true,
-		scope: {
-			showFilters: '&',
-			citiesAreUp: '&',
-			activeType: '=',
-			activeCity: '=',
-			goNativeUrl: '&'
-		},
 		controller: function($scope){
-
-			$scope.disableFilterButton = function(){
-				if ($scope.citiesAreUp() === true){
-					return true;
-				}
-				return false;
-			}
-
-			$scope.close = function(){
-				$scope.goNativeUrl({location: 'close'});
-			}
 
 			var titleBarTitle = '';
 
 			$scope.getTitle = function(){
 				if($scope.activeType === 'location'){
-					if($scope.activeCity === ''){
+					if(!$scope.activeCity){
 						titleBarTitle = 'Location';
 						return titleBarTitle;
 					} else {
-						titleBarTitle = $scope.activeCity.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function(key) { return key.toUpperCase()});
+						titleBarTitle = $scope.activeCity.replace(/(?: |\b)(\w)/g, function(key) { return key.toUpperCase()});
 						return titleBarTitle;
 					}
 				} else {
@@ -32847,198 +32824,118 @@ require('./services');
 require('./controllers');
 require('./directives');
 
-},{"./controllers":7,"./directives":10,"./services":20,"angular":4,"angular-route":2,"fastclick":5}],18:[function(require,module,exports){
-'use strict';
+},{"./controllers":7,"./directives":10,"./services":19,"angular":4,"angular-route":2,"fastclick":5}],18:[function(require,module,exports){
+'use strict'
 
-module.exports = function($rootscope, $http){
-	
-  var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
-  _proxAuth = window.theGrade.proxAuth,
-  _fbid = window.theGrade.fbid,
-  _activeType = '',
-  _activeGender = '',
-  _activeCity = '',
-  _activeFilters = {};
+module.exports = function($rootScope, $http){
+	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php',
+	_proxAuth = window.theGrade.proxAuth,
+	_fbid = window.theGrade.fbid,
+	_activeType = '',
+	_activeGender = '',
+	_activeCity = '',
+	_activeFilters = {};
 
-  this.setActiveType = function(type){
-    _activeType = type;
-    if (type !== 'location'){
-      $rootscope.$emit('tabBar::activeTypeUpdated', type);
-    } else if (type === 'location' && _activeCity !== '') {
-      $rootscope.$emit('tabBar::activeTypeUpdated', type);
-    }
-  }
+	function makeUrl(){
+		var _url = _baseUrl + '?fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
+		if(_activeType === 'location'){
+			_url += '&type=location';
+			_url += '&gender=' + _activeGender;
+			_url += '&city=' + _activeCity;
+		} else {
+			_url += '&type=' + _activeType;
+			_url += '&gender=' + _activeGender;
+		}
 
-  this.setActiveGender = function(gender){
-    _activeGender = gender;
-    $rootscope.$emit('tabBar::activeGenderUpdated', gender);
-  }
+		if(Object.keys(_activeFilters).length > 0){
+			for(var key in _activeFilters){
+				_url += '&' + key + '=' + _activeFilters[key];
+			}
+		}
 
-  this.setActiveCity = function(city){
-    _activeCity = city;
-    $rootscope.$emit('cityList::activeCityUpdated', city);
-  }
+		return _url;
+	}
 
-  this.setActiveFilters = function(filters){
-    _activeFilters = filters;
-    if (filters !== {}){
-      $rootscope.$emit('filters::activeFiltersUpdated', filters);
-    }
-  }
-
-  function makeUrl(){
-    var _url = _baseUrl + 'fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
-
-    if (_activeType === 'location'){
-      _url += '&type=location';
-      _url += '&gender=' + _activeGender;
-      _url += '&city=' + _activeCity;
-    } else {
-      _url += '&type=' + _activeType;
-      _url += '&gender=' + _activeGender;
-    }
-
-    if (Object.keys(_activeFilters).length > 0){
-      for (var key in _activeFilters){
-        _url += '&' + key + '=' + _activeFilters[key];
-      }
-    }
-
-    return _url;
-
-  }
-
-  this.fetchData = function(){
-    return $http({method: "GET", url: makeUrl()});
-  }
-
-  this.requestUrl = function(){
-    return makeUrl();
-  }
-
-};
-},{}],19:[function(require,module,exports){
-'use strict';
-
-module.exports = function(){
-	var _activeFilters = {};
-
-	this.addFilter = function(filter, value){
-		if (!(filter in _activeFilters)){
-			_activeFilters[filter] = value;
+	this.setActiveType = function(type){
+		_activeType = type;
+		if(type !== 'location'){
+			$rootScope.$emit('tabBar::activeTypeUpdated', type);
+		} else if (type === 'location' && _activeCity !== ''){
+			$rootScope.$emit('tabBar::activeTypeUpdated', type);
 		}
 	}
 
-	this.removeFilter = function(filter){
-		if (filter in _activeFilters) {
-			delete _filters[filter];
-		}
+	this.setActiveGender = function(gender){
+		_activeGender = gender;
+		$rootScope.$emit('tabBar::activeGenderUpdated', gender);
 	}
 
-	this.resetFilters = function(){
+	this.setActiveCity = function(city){
+		_activeCity = city;
+		$rootScope.$emit('cityList::activeCityUpdated', city);
+	};
+
+	this.setActiveFilters = function(filters){
 		_activeFilters = {};
+
+		//catch the 'All' value for religion and occupation
+		for(var key in filters){
+			if(filters[key] !== 'All'){
+				_activeFilters[key] = filters[key];
+			}
+		}
+		$rootScope.$emit('filterView::activeFiltersUpdated', JSON.stringify(_activeFilters));
 	}
 
-	this.activeFilters = _activeFilters;
-};
-},{}],20:[function(require,module,exports){
+	this.getUrl = function(){
+		return makeUrl();
+	}
+
+	this.fetchData = function(){
+	  return $http({method: "GET", url: makeUrl()});
+	}
+
+
+
+
+
+}
+},{}],19:[function(require,module,exports){
 'use strict';
 
 require('angular');
 
-angular.module('TheGrade.Leaderboard').service('TabService', ['$rootScope', require('./tab-service')]);
 angular.module('TheGrade.Leaderboard').service('DataService', ['$rootScope', '$http', require('./data-service')]);
-angular.module('TheGrade.Leaderboard').service('FilterService', ['$rootScope', require('./request-service')]);
-angular.module('TheGrade.Leaderboard').service('requestService', ['$rootScope', 'TabService', 'FilterService', require('./filter-service')]);
+angular.module('TheGrade.Leaderboard').service('UserAgentService', require('./user-agent-service'));
 
-},{"./data-service":18,"./filter-service":19,"./request-service":21,"./tab-service":22,"angular":4}],21:[function(require,module,exports){
-'use strict';
+},{"./data-service":18,"./user-agent-service":20,"angular":4}],20:[function(require,module,exports){
+'use strict'
 
-module.exports = function($rootScope, TabService, FilterService){
-	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php?',
-	_fbid = '48611106',
-	_proxAuth = 'oE9FaTgLsDFNvQLkiYGS6ML2FdffDsi4SA54eN1qGKmYJymhEcsyBFtQokJc';
+module.exports = function(){
 
+	function getMobileOperatingSystem() {
+	  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+	  console.log('looking up user agent');
+	  if( userAgent.match( /iPad/i ) || userAgent.match( /iPhone/i ) || userAgent.match( /iPod/i ) )
+	  {
+	    return 'iOS';
 
+	  }
+	  else if( userAgent.match( /Android/i ) )
+	  {
 
-	var buildParams = function() {
-		var _type = tabService.activeType;
-		var _gender = tabService.activeGender;
-
-		var _params = {};
-
-		if (_type === 'location') {
-			_params.type = _type;
-			_params.city = 'Atlanta';
-			_params.gender = _gender;
-		}
-		else {
-			_params.type = _type;
-			_params.gender = _gender;
-		}
-
-		return _params;
-	};
-	
-
-	var makeUrl = function(params) {
-		var _url = _baseUrl + 'fbid=' + _fbid + '&prox_auth_token=' + _proxAuth;
-
-
-		_url += '&type=' + params.type,
-		_url += '&gender=' + params.gender;
-			
-
-		if ('city' in params) {
-			_url += '&city=' + params.city;
-		}
-
-		return _url;
-	};
-
-	this.requestUrl = function() {
-
-		return makeUrl(buildParams());
-	};
-
-};
-},{}],22:[function(require,module,exports){
-'use strict';
-
-module.exports = function($rootScope){
-	var _types = [
-		{
-			'type':'nearby',
-			'label': 'nearby'
-		},
-		{
-			'type':'location',
-			'label': 'cities'
-		},
-		{
-			'type':'friends',
-			'label': 'friends'
-		}
-	];
-
-	var _genders = [
-		{
-			'gender': 'F',
-			'label': 'Female'
-		},
-		{
-			'gender': 'M',
-			'label': 'Male'
-		},
-	];
-
-	this.getTypes = function(){
-		return _types;
-	};
-
-	this.getGenders = function(){
-		return _genders
+	    return 'Android';
+	  }
+	  else
+	  {
+	    return 'unknown';
+	  }
 	}
+	//cache the UA
+	var _mobileOS = getMobileOperatingSystem();
 
-};
+	this.getMobileOS = function(){
+		return _mobileOS;
+	}
+}
 },{}]},{},[17]);

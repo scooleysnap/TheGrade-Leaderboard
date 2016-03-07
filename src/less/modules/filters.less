@@ -45,6 +45,10 @@
 		padding: 0 8px;
 	}
 
+	&-clear-button-wrap{
+		padding: 0 8px;
+	}
+
 	&.is-visible {
 		-webkit-transform: translate3d(0,0,0);
 		trasnform: translate3d(0,0,0);
@@ -161,35 +165,21 @@
 		padding-left: 0;
 	}
 
-	.filter-input {
+	.filter-select {
 		position: relative;
 		float: left;
 		width: 50%;
 		height: 100%;
-		
-		input {
-			position: absolute;
-			top: 0;
-			color: inherit;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			z-index: 2;
-			-webkit-appearance: none;
-			appearance: none;
-			background-color: transparent;
-			border: none;
-			font-size: 17px;
-			font-weight: 400;
-			padding: 0;
-			margin: 0;
-			width: 100%;
-			text-align: center;
-			border-right: 1px solid @tertiary-grey;
+		text-align: center;
+		border-right: 1px solid @tertiary-grey;
+		box-sizing: border-box;
 
-			&:focus {
-				outline: none;
-			}
+		select {
+			opacity: 0.0001;
+		}
+
+		&-value {
+			text-align: center;
 		}
 		
 		// from and to labels
@@ -213,9 +203,7 @@
 		}
 	}
 
-	[class="filter-input"]:last-of-type {
-		border: none;
-	}
+	
 }
 
 

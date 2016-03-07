@@ -16,32 +16,28 @@
 
 <script type="text/ng-template" id="leaderboard-view">
 	<title-bar></title-bar>
-	
+	<div class="scroll-wrap">
+		<ul class="leaderboard" ng-class="{'is-loading': isLoading}">
+			<leaderboard-item ng-repeat="user in users" user="user"></leaderboard-item>
+		</ul>
+		<div class="no-results" ng-show="noResults()">
+			<h1 class="no-results-header">No Results!</h1>
+			<p class="no-results-copy">Try Changing your filter settings, or select a different leaderboard</p>
+		</div>
+	</div>
 	<city-list></city-list>
 	<tab-bar active-type="activeType" cities-are-up="citiesAreUp" active-gender="activeGender"></tab-bar>
 	<filter-view></filter-view>
 </script>
-<script type="text/ng-template">
-<title-bar show-filters="showFilters()" cities-are-up="citiesAreUp()" active-type="activeType" active-city="activeCity"></title-bar>
-<div class="scroll-wrap">
-	<ul class="leaderboard" ng-class="{'is-loading': loading}">
-		<leaderboard-item ng-repeat="user in users"></leaderboard-item>
-	</ul>
-	<div class="no-results" ng-show="noResults()">
-		<h1 class="no-results-header">No Results!</h1>
-		<p class="no-results-copy">Try Changing your filter settings, or select a different leaderboard</p>
-	</div>
-</div>
-</script>
 <script type="text/ng-template" id="title-bar">
 	<header class="title-bar title-bar-fixed">
-		<div class="button button-close"><span class="icon icon-x"></span></div>
+		<div class="button button-close" native-link ng-click="goNativeUrl('close')"><span class="icon icon-x"></span></div>
 		<h1 class="title-bar-title">{{getTitle()}}</h1>
 		<div class="button button-radius button-ghost button-filter" ng-class="{'is-disabled': disableFilterButton()}" ng-click="showFilters()">Filter <span class="icon icon-settings"></span></div>
 	</header>
 </script>
 <script type="text/ng-template" id="leaderboard-item">
-	<li class="leaderboard-row" ng-click="goToProfile()" user="user">
+	<li class="leaderboard-row" native-link ng-click="goNativeUrl('profile', user.fbid)">
 		<div class="leaderboard-item leaderboard-count"></div>
 		<div class="leaderboard-item leaderboard-photo"><img ng-src="{{user.img}}" width-"53" height="94" alt=""></div>
 		<div class="leaderboard-item leaderboard-stats">
@@ -123,11 +119,23 @@
 				<div class="filter-label" ng-click="activateFilter('age_min'); activeFilter('age_max')">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
-						<div class="filter-input filter-input-min">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min.value">
+						<div class="filter-select filter-select-min">
+							<select name="age_min" id="age_min" 
+							ng-model="filters.age_min.value"
+							ng-focus="activateFilter('age_min'); activateFilter('age_max')"
+							ng-change="checkFilterAgeMax()"
+							ng-options="label for (label, value) in ageRangeOptionsMin">
+							</select>
+							<span class="filter-select-value">{{filters.age_min.value == 50 ? '50+' : filters.age_min.value}}</span>
 						</div>
-						<div class="filter-input filter-input-max">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
+						<div class="filter-select filter-select-max">
+							<select name="age_max" id="age_max" 
+							ng-model="filters.age_max.value"
+							ng-focus="activateFilter('age_min'); activateFilter('age_max')"
+							ng-change="checkFilterAgeMin()"
+							ng-options="name for (name, value) in ageRangeOptionsMax">
+							</select>
+							<span class="filter-select-value">{{filters.age_max.value == 100 ? '50+' : filters.age_max.value}}</span>
 						</div>
 					</div>
 					<div class="filter-toggle-wrap">
@@ -190,12 +198,17 @@
 					</div>
 				</div>
 			</div>
+			<!-- optional clear button ****
+			<div class="filters-view-clear-button-wrap">
+				<div class="button button-radius button-ghost button-clear" ng-click="clearFilters()">Clear All Filters</div>
+			</div>
+			-->
 			<div class="filters-view-buttons">
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-ghost button-cancel" ng-click="hideFilters()">Cancel</div>
+					<div class="button button-radius button-ghost button-cancel" ng-click="cancelButtonFilters()">Cancel</div>
 				</div>
 				<div class="filters-view-button-wrap">
-					<div class="button button-radius button-fill button-apply" ng-click="applyFilters()">Apply</div>
+					<div class="button button-radius button-fill button-apply" ng-click="applyFilters()">OK</div>
 				</div>
 			</div>
 		</form>

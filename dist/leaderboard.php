@@ -143,11 +143,21 @@
 				<div class="filter-label">Age: Min. Age: {{filters.age_min.value}}/ Max Age: {{filters.age_max.value}}</div>
 				<div class="filter-wrap">
 					<div class="filter-control">
-						<div class="filter-input filter-input-min">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_min" id="age_min" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_min.value">
+
+						<div class="filter-select filter-select-min">
+							<select name="" id="">
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
 						</div>
-						<div class="filter-input filter-input-max">
-							<input type="number" pattern="\d*" min="18" max="100" name="age_max" id="age_max" ng-focus="activateFilter('age_min'); activateFilter('age_max')" ng-model="filters.age_max.value">
+
+						<div class="filter-select filter-select-max">
+							<select name="" id="">
+								<option value="18">18</option>
+								<option value="19">19</option>
+								<option value="20">20</option>
+							</select>
 						</div>
 					</div>
 					<div class="filter-toggle-wrap">
