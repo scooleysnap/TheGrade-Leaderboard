@@ -5,7 +5,8 @@ module.exports = function(DataService) {
 		templateUrl: 'filter-view',
 		restrict: 'E',
 		replace: true,
-		controller: function($scope){
+		controller: ['$scope', function($scope){
+			console.log('filter-view loaded');
 			$scope.filtersAreVisible = false;
 			var _activeFilters = {};
 
@@ -138,7 +139,7 @@ module.exports = function(DataService) {
 			
 
 
-		},
+		}],
 		link: function(scope, elem, attrs){
 			scope.filters = {
 				'radius_mi' : {

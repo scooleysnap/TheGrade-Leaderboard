@@ -3,8 +3,8 @@
 module.exports = function(UserAgentService) {
 	return {
 		restrict: 'A',
-		controller: function($scope){
-
+		controller: ['$scope', function($scope){
+			console.log('native-link loaded');
 			var _mobileOS = UserAgentService.getMobileOS();
 
 
@@ -31,7 +31,7 @@ module.exports = function(UserAgentService) {
 
 
 
-		},
+		}],
 		link: function(scope, elem, attrs){
 
 		}

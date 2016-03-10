@@ -2,4 +2,4 @@
 
 require('angular');
 
-angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$scope', '$rootScope', 'DataService', require('./LeaderboardController')]);
+angular.module('TheGrade.Leaderboard').controller('LeaderboardController', ['$scope', '$rootScope', 'DataService', 'UserAgentService', require('./LeaderboardController')]);

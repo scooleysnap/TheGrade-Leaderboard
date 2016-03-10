@@ -5,8 +5,8 @@ module.exports = function() {
 		templateUrl: 'title-bar',
 		restrict: 'E',
 		replace: true,
-		controller: function($scope){
-
+		controller: ['$scope', function($scope){
+			console.log('title-bar loaded');
 			var titleBarTitle = '';
 
 			$scope.getTitle = function(){
@@ -24,7 +24,7 @@ module.exports = function() {
 				}
 			};
 
-		},
+		}],
 		link: function(scope, elem, attrs){
 
 		}

@@ -1,6 +1,7 @@
 'use strict';
 
-module.exports = function($scope, $rootScope, DataService){
+module.exports = function($scope, $rootScope, DataService, UserAgentService){
+	console.log('LeaderboardController loaded');
 	//Inits for view
 	$scope.activeType = "nearby";
 	$scope.activeGender = "F";
@@ -26,12 +27,28 @@ module.exports = function($scope, $rootScope, DataService){
 	function getData(){
 		//set loading
 		$scope.isLoading = true;
+		console.log('init ajax request');
 		//get data
 		DataService.fetchData().success(function(data){
 			$scope.users = data.data.rankings;
 			$scope.isLoading = false;
+			console.log('ajax request success');
 		});
 		
+	}
+
+	//Set height of body/html for Android
+	var _isAndroid = UserAgentService.isAndroid();
+
+	if(_isAndroid){
+		setAndroidHeight();
+	}
+
+	function setAndroidHeight(){
+		var _height = window.outerHeight;
+		console.log('setting android height');
+		angular.element(document.querySelectorAll('body')).css('height', _height + 'px');
+
 	}
 
 	//Get Initial Data

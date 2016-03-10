@@ -9,6 +9,9 @@ module.exports = function() {
 			goNativeUrl: '&'
 		},
 		templateUrl: 'leaderboard-item',
+		controller: ['$scope', function(){
+			console.log('leaderboard-item loaded');
+		}],
 		link: function (scope, elem, attrs){
 			
 			scope.goToProfile = function(){

@@ -26,4 +26,8 @@ module.exports = function(){
 	this.getMobileOS = function(){
 		return _mobileOS;
 	}
+
+	this.isAndroid = function(){
+		return _mobileOS === 'Android';
+	}
 }

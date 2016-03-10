@@ -11,6 +11,9 @@ module.exports = function() {
 		},
 		templateUrl: 'tab-bar-item-type',
 		require: '^tabBar',
+		controller: ['$scope', function(){
+			console.log('tab-bar-item-type loaded');
+		}],
 		link: function (scope, elem, attrs, tabBarCtrl){
 			
 			scope.makeActiveType = function() {

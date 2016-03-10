@@ -32410,12 +32410,10 @@ module.exports = function(DataService) {
 		},
 		link: function(scope, elem, attrs){
 			scope.setActiveCity = function(city){
-				if (scope.activeCity !== city){
 					scope.activeCity = city;
 					DataService.setActiveCity(city);
 
 					scope.hideCityList();
-				}
 			};
 		}
 	}
@@ -32828,7 +32826,7 @@ require('./directives');
 'use strict'
 
 module.exports = function($rootScope, $http){
-	var _baseUrl = 'https://www.thegradedating.com/dev_envs/rbrisita/data/leaderboard/search.php',
+	var _baseUrl = 'https://www.thegradedating.com/data/leaderboard/search.php',
 	_proxAuth = window.theGrade.proxAuth,
 	_fbid = window.theGrade.fbid,
 	_activeType = '',

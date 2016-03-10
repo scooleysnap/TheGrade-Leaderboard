@@ -10,8 +10,8 @@ module.exports = function(DataService) {
 			citiesAreUp: '='
 		},
 		templateUrl: 'tab-bar',
-		controller: function ($scope){
-
+		controller: ['$scope', function ($scope){
+			console.log('tab-bar loaded');
 			this.setActiveType = function (type){
 				$scope.activeType = type;
 				DataService.setActiveType(type);
@@ -33,7 +33,7 @@ module.exports = function(DataService) {
 			this.getActiveGender = function() {
 				return $scope.activeGender;
 			};
-		},
+		}],
 		link: function (scope, elem, attrs){
 
 

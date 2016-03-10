@@ -5,10 +5,13 @@
   "main": "n/a",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:js": "browserify src/js/main.js > dist/js/leaderboard.js",
-    "build:css": "lessc src/less/main.less dist/css/leaderboard.css",
+    "build:js": "browserify src/js/main.js > dist/js/leaderboard-v2.js",
+    "build:js:prod": "browserify src/js/main.js -d -p [minifyify --map leaderboard-v2.js.map --output dist/js/leaderboard-v2.js.map] > dist/js/leaderboard-v2.js",
+    "build:css": "lessc src/less/main.less dist/css/leaderboard-v2.css",
+    "build:css:prod": "lessc -x src/less/main.less dist/css/leaderboard-v2.css",
     "build": "npm run build:css && npm run build:js",
-    "build:watch": "watch 'npm run build' ./src -d"
+    "build:watch": "watch 'npm run build' ./src -d",
+    "build:prod": "npm run build:css:prod && npm run build:js:prod"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,7 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "less": "^2.6.0",
+    "minifyify": "^7.3.2",
     "watch": "^0.17.1"
   },
   "dependencies": {

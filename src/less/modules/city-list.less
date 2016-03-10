@@ -1,11 +1,11 @@
 .city-select {
 	background-color: @secondary-grey;
 	font-family: @font-family;
-	position: absolute;
-	height: 100%;
+	position: fixed;
 	bottom: @tab-bar-height + 27px;
 	left: 0;
 	right: 0;
+	top: @title-bar-height;
 	z-index: 4;
 	-webkit-tranform: translate3d(0,100%,0);
 	transform: translate3d(0,100%,0);
@@ -14,7 +14,6 @@
 	overflow: hidden;
 	
 	&.is-up{
-		height: auto;
 		transform: translate3d(0, 0, 0);
 		top: @title-bar-height;
 		bottom: @tab-bar-height;

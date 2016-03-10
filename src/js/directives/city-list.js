@@ -5,10 +5,14 @@ module.exports = function(DataService) {
 		templateUrl: 'city-list',
 		restrict: 'E',
 		replace: true,
-		controller: function($scope){
-			
+		controller: ['$scope', function($scope){
+			console.log('city-list loaded');
 			$scope.citiesAreVisible = function(){
 				if ($scope.activeType === 'location'){
+					if($scope.citiesAreUp === true){
+						
+						
+					}
 					return true;
 				}
 				return false;
@@ -35,15 +39,13 @@ module.exports = function(DataService) {
 			};
 
 
-		},
+		}],
 		link: function(scope, elem, attrs){
 			scope.setActiveCity = function(city){
-				if (scope.activeCity !== city){
 					scope.activeCity = city;
 					DataService.setActiveCity(city);
 
 					scope.hideCityList();
-				}
 			};
 		}
 	}
