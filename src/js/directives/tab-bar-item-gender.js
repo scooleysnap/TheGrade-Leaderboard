@@ -12,7 +12,6 @@ module.exports = function() {
 		templateUrl: 'tab-bar-item-gender',
 		require: '^tabBar',
 		controller: ['$scope', function(){
-			console.log('tab-bar-item-gender loaded');
 		}],
 		link: function (scope, elem, attrs, tabBarCtrl){
 			

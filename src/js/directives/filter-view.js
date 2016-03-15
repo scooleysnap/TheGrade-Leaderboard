@@ -6,7 +6,6 @@ module.exports = function(DataService) {
 		restrict: 'E',
 		replace: true,
 		controller: ['$scope', function($scope){
-			console.log('filter-view loaded');
 			$scope.filtersAreVisible = false;
 			var _activeFilters = {};
 

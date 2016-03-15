@@ -4,7 +4,6 @@ module.exports = function(UserAgentService) {
 	return {
 		restrict: 'A',
 		controller: ['$scope', function($scope){
-			console.log('native-link loaded');
 			var _mobileOS = UserAgentService.getMobileOS();
 
 

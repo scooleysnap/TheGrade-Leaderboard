@@ -32,4 +32,8 @@ body {
 	box-sizing: border-box;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
+
+	&.is-loading .leaderboard-active-user, &.is-loading .leaderboard-results {
+		display: none;
+	}
 }

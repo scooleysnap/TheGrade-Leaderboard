@@ -30,6 +30,12 @@ module.exports = function($scope, $rootScope, DataService, UserAgentService){
 		console.log('init ajax request');
 		//get data
 		DataService.fetchData().success(function(data){
+			//get current user data if it exists
+			if(data.data.user_rank_details){
+				$scope.currentUser = data.data.user_rank_details;
+			} else {
+				$scope.currentUser = null;
+			}
 			$scope.users = data.data.rankings;
 			$scope.isLoading = false;
 			console.log('ajax request success');
@@ -49,6 +55,13 @@ module.exports = function($scope, $rootScope, DataService, UserAgentService){
 		console.log('setting android height');
 		angular.element(document.querySelectorAll('body')).css('height', _height + 'px');
 
+	}
+
+	$scope.hideActiveUser = function(){
+		if($scope.currentUser === null){
+			return true;
+		}
+		return false;
 	}
 
 	//Get Initial Data

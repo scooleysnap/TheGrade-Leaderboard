@@ -6,7 +6,6 @@ module.exports = function(DataService) {
 		restrict: 'E',
 		replace: true,
 		controller: ['$scope', function($scope){
-			console.log('city-list loaded');
 			$scope.citiesAreVisible = function(){
 				if ($scope.activeType === 'location'){
 					if($scope.citiesAreUp === true){

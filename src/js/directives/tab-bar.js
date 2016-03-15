@@ -11,7 +11,6 @@ module.exports = function(DataService) {
 		},
 		templateUrl: 'tab-bar',
 		controller: ['$scope', function ($scope){
-			console.log('tab-bar loaded');
 			this.setActiveType = function (type){
 				$scope.activeType = type;
 				DataService.setActiveType(type);

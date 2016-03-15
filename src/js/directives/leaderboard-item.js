@@ -6,18 +6,19 @@ module.exports = function() {
 		restrict: "E",
 		scope: {
 			user: '=',
-			goNativeUrl: '&'
+			activeUser: '@?'
 		},
 		templateUrl: 'leaderboard-item',
-		controller: ['$scope', function(){
-			console.log('leaderboard-item loaded');
+		controller: ['$scope', function($scope){
+			console.log($scope.user);
 		}],
 		link: function (scope, elem, attrs){
-			
-			scope.goToProfile = function(){
-				scope.goNativeUrl({location: 'profile', data: scope.user.fbid});
+			var rankCell = angular.element(elem[0].querySelector('.leaderboard-item'));
+			if ('activeUser' in attrs){
+				rankCell.addClass('leaderboard-rank');
+			} else {
+				rankCell.addClass('leaderboard-count');
 			}
-
 		}
 	};
 };

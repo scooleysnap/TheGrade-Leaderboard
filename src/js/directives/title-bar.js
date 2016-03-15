@@ -6,7 +6,6 @@ module.exports = function() {
 		restrict: 'E',
 		replace: true,
 		controller: ['$scope', function($scope){
-			console.log('title-bar loaded');
 			var titleBarTitle = '';
 
 			$scope.getTitle = function(){
